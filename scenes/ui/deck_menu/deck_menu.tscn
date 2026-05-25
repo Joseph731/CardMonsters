@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://s7kkqewb2ppt"]
+
+[ext_resource type="Script" uid="uid://d2s3csr183o2f" path="res://scenes/ui/deck_menu/deck_menu.gd" id="1_jea8d"]
+
+[node name="DeckMenu" type="Control" unique_id=677042073]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jea8d")
+
+[node name="BackgroundDetector" type="Button" parent="." unique_id=536406694]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1228086350]
+layout_mode = 0
+use_top_left = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
+layout_mode = 2
+
+[node name="DrawButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Draw"

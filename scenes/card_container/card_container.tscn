@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://biait4cvdfqqh"]
+
+[ext_resource type="Script" uid="uid://cdr8moi524d4o" path="res://scenes/card_container/card_container.gd" id="1_bej84"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t8ypw"]
+size = Vector2(138, 200)
+
+[node name="CardContainer" type="Node2D" unique_id=108001094]
+script = ExtResource("1_bej84")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=274592149]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=307787273]
+shape = SubResource("RectangleShape2D_t8ypw")

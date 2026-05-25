@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bdu4b3u3cpggq"]
+
+[ext_resource type="Script" uid="uid://5c0p6artycdp" path="res://scenes/deck/deck.gd" id="1_uw8ea"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cjcqi"]
+size = Vector2(138, 200)
+
+[node name="Deck" type="Node2D" unique_id=57187524]
+script = ExtResource("1_uw8ea")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1128374962]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=150844995]
+shape = SubResource("RectangleShape2D_cjcqi")

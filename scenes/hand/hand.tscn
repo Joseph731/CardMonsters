@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://r5tnl0hgdhd5"]
+
+[ext_resource type="Script" uid="uid://bklu6a78vakpa" path="res://scenes/hand/hand.gd" id="1_jhnrk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pvaie"]
+size = Vector2(804, 250)
+
+[node name="Hand" type="Node2D" unique_id=314788225]
+script = ExtResource("1_jhnrk")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1410461255]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=719511244]
+shape = SubResource("RectangleShape2D_pvaie")
