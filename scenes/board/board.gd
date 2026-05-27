@@ -22,7 +22,8 @@ var carried_card: Card:
 		return _carried_card
 	set(value):
 		if value == null:
-			_carried_card.glow.visible = false
+			if _carried_card != null:
+				_carried_card.glow.visible = false
 		else:
 			value.glow.visible = true
 		_carried_card = value
@@ -62,6 +63,12 @@ func _ready() -> void:
 		card.clicked.connect(_on_card_clicked)
 		deck2.add_card(card)
 		card.collision_shape_2d.shape = card.collision_shape_2d.shape.duplicate(true)
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("drop_carried_card"):
+		if menu_container.get_child_count() != 0:
+			menu_container.get_children()[-1].queue_free()
+		carried_card = null
 
 func move_card_from_container_to_container(card: Card,
 	container1: CardContainer, container2: CardContainer) -> void:
