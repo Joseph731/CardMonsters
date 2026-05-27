@@ -28,6 +28,51 @@ func update_card_positions() -> void:
 			cards[2].position.x = 0
 			cards[3].position.x = 184
 			cards[4].position.x = 368
+		6:
+			cards[0].position.x = -460
+			cards[1].position.x = -276
+			cards[2].position.x = -92
+			cards[3].position.x = 92
+			cards[4].position.x = 276
+			cards[5].position.x = 460
+		7:
+			cards[0].position.x = -552
+			cards[1].position.x = -368
+			cards[2].position.x = -184
+			cards[3].position.x = 0
+			cards[4].position.x = 184
+			cards[5].position.x = 368
+			cards[6].position.x = 552
+		8:
+			cards[0].position.x = -644
+			cards[1].position.x = -460
+			cards[2].position.x = -276
+			cards[3].position.x = -92
+			cards[4].position.x = 92
+			cards[5].position.x = 276
+			cards[6].position.x = 460
+			cards[7].position.x = 644
+		9:
+			cards[0].position.x = -736
+			cards[1].position.x = -552
+			cards[2].position.x = -368
+			cards[3].position.x = -184
+			cards[4].position.x = 0
+			cards[5].position.x = 184
+			cards[6].position.x = 368
+			cards[7].position.x = 552
+			cards[8].position.x = 736
+		10:
+			cards[0].position.x = -828
+			cards[1].position.x = -644
+			cards[2].position.x = -460
+			cards[3].position.x = -276
+			cards[4].position.x = -92
+			cards[5].position.x = 92
+			cards[6].position.x = 276
+			cards[7].position.x = 460
+			cards[8].position.x = 644
+			cards[9].position.x = 828
 
 func add_card(card: Card) -> void:
 	super.add_card(card)

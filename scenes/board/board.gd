@@ -12,6 +12,8 @@ const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
 @onready var deck2: CardContainer= $Deck2
 @onready var spell_zone1: Node = $SpellZone1
 @onready var spell_zone2: Node = $SpellZone2
+@onready var monster_zone1: Node = $MonsterZone1
+@onready var monster_zone2: Node = $MonsterZone2
 @onready var menu_container: Node = $MenuContainer
 
 var carried_card: Card
@@ -23,6 +25,8 @@ func _ready() -> void:
 	var card_containers: Array[CardContainer]
 	card_containers.assign(spell_zone1.get_children())
 	card_containers.append_array(spell_zone2.get_children())
+	card_containers.append_array(monster_zone1.get_children())
+	card_containers.append_array(monster_zone2.get_children())
 	card_containers.append(hand1)
 	card_containers.append(hand2)
 	card_containers.append(deck1)
@@ -32,6 +36,8 @@ func _ready() -> void:
 		if !is_multiplayer_authority() && card_container is not Hand:
 			card_container.global_position.x = reflection_point.position.x * 2 - card_container.global_position.x
 			card_container.global_position.y = reflection_point.position.y * 2 - card_container.global_position.y
+		if card_container.global_position.y < reflection_point.global_position.y:
+			card_container.rotate(PI)
 	
 	if is_multiplayer_authority():
 		hand2.area_2d.input_pickable = false

@@ -80,6 +80,70 @@ field_zone_sized_cards = true
 is_field_zone = true
 enforce_occupied = true
 
+[node name="MonsterZone1" type="Node" parent="." unique_id=1387864596]
+
+[node name="CardContainer1" parent="MonsterZone1" unique_id=81881212 instance=ExtResource("5_kymhv")]
+position = Vector2(554, 515)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer2" parent="MonsterZone1" unique_id=1226248098 instance=ExtResource("5_kymhv")]
+position = Vector2(757, 515)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer3" parent="MonsterZone1" unique_id=445684409 instance=ExtResource("5_kymhv")]
+position = Vector2(960, 515)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer4" parent="MonsterZone1" unique_id=1552839519 instance=ExtResource("5_kymhv")]
+position = Vector2(1163, 515)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer5" parent="MonsterZone1" unique_id=1934751887 instance=ExtResource("5_kymhv")]
+position = Vector2(1366, 515)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="MonsterZone2" type="Node" parent="." unique_id=2105077889]
+
+[node name="CardContainer1" parent="MonsterZone2" unique_id=317583463 instance=ExtResource("5_kymhv")]
+position = Vector2(1366, 310)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer2" parent="MonsterZone2" unique_id=2145851980 instance=ExtResource("5_kymhv")]
+position = Vector2(1163, 310)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer3" parent="MonsterZone2" unique_id=1983967684 instance=ExtResource("5_kymhv")]
+position = Vector2(960, 310)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer4" parent="MonsterZone2" unique_id=1416220246 instance=ExtResource("5_kymhv")]
+position = Vector2(757, 310)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
+[node name="CardContainer5" parent="MonsterZone2" unique_id=701465922 instance=ExtResource("5_kymhv")]
+position = Vector2(554, 310)
+field_zone_sized_cards = true
+is_field_zone = true
+enforce_occupied = true
+
 [node name="Hand1" parent="." unique_id=1201960800 instance=ExtResource("1_q07he")]
 position = Vector2(960, 950)
 
