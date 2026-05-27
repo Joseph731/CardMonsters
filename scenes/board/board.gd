@@ -16,7 +16,16 @@ const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
 @onready var monster_zone2: Node = $MonsterZone2
 @onready var menu_container: Node = $MenuContainer
 
-var carried_card: Card
+var _carried_card: Card
+var carried_card: Card:
+	get:
+		return _carried_card
+	set(value):
+		if value == null:
+			_carried_card.glow.visible = false
+		else:
+			value.glow.visible = true
+		_carried_card = value
 
 func _ready() -> void:
 	deck1.clicked.connect(_on_deck_clicked)
