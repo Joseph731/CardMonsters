@@ -4,6 +4,7 @@ const CARD_MENU = preload("uid://danfrumkq1h60")
 const CARD = preload("uid://cguukq18jkrx2") #TEMP FOR DEVELOPMENT
 const DECK_MENU = preload("uid://s7kkqewb2ppt")
 const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
+const SCROLL_DECK_MENU = preload("uid://cks00hlm6vnr8")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -58,11 +59,9 @@ func _ready() -> void:
 		var card: Card = CARD.instantiate()
 		card.clicked.connect(_on_card_clicked)
 		deck1.add_card(card)
-		card.collision_shape_2d.shape = card.collision_shape_2d.shape.duplicate(true)
 		card = CARD.instantiate()
 		card.clicked.connect(_on_card_clicked)
 		deck2.add_card(card)
-		card.collision_shape_2d.shape = card.collision_shape_2d.shape.duplicate(true)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("drop_carried_card"):
@@ -133,6 +132,7 @@ func _on_deck_clicked(deck: CardContainer) -> void:
 	
 	var deck_menu: DeckMenu = DECK_MENU.instantiate()
 	deck_menu.draw_pressed.connect(_on_draw_pressed.bind(deck))
+	deck_menu.search_pressed.connect(_on_search_pressed.bind(deck))
 	menu_container.add_child(deck_menu)
 	deck_menu.center_container.global_position = deck.global_position
 
@@ -143,3 +143,28 @@ func _on_draw_pressed(deck: CardContainer) -> void:
 	else:
 		target_hand = hand2
 	move_card_to_card_container.rpc(deck.cards[-1].get_path(), target_hand.get_path())
+
+func _on_search_pressed(deck: Deck) -> void:
+	if deck.is_being_searched:
+		return
+	for menu in menu_container.get_children():
+		if menu is ScrollDeckMenu:
+			menu.queue_free()
+	deck.is_being_searched = true
+	var scroll_deck_menu: ScrollDeckMenu = SCROLL_DECK_MENU.instantiate()
+	scroll_deck_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(deck))
+	scroll_deck_menu.tree_exited.connect(_on_scroll_deck_menu_tree_exited.bind(deck))
+	menu_container.add_child(scroll_deck_menu)
+	for card in deck.cards:
+		scroll_deck_menu.add_card(card.duplicate())
+
+func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
+	var target_hand: CardContainer
+	if is_multiplayer_authority():
+		target_hand = hand1
+	else:
+		target_hand = hand2
+	move_card_to_card_container.rpc(deck.cards[card_index].get_path(), target_hand.get_path())
+
+func _on_scroll_deck_menu_tree_exited(deck: Deck) -> void:
+	deck.is_being_searched = false

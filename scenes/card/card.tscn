@@ -5,9 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://cmpryrxcsptrt" path="res://scenes/card/monster_reborn.png" id="3_g65cd"]
 [ext_resource type="Texture2D" uid="uid://bfqpmrprfjsdo" path="res://scenes/card/card_glow.png" id="4_g65cd"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_imta7"]
-size = Vector2(685, 1000)
-
 [node name="Card" type="Node2D" unique_id=839113413]
 script = ExtResource("1_imta7")
 
@@ -22,8 +19,11 @@ texture = ExtResource("3_g65cd")
 visible = false
 texture = ExtResource("4_g65cd")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1352411307]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1423003464]
-shape = SubResource("RectangleShape2D_imta7")
+[node name="Control" type="Control" parent="." unique_id=1851660221]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -342.5
+offset_top = -500.0
+offset_right = 342.5
+offset_bottom = 500.0
+pivot_offset = Vector2(342.5, 500)

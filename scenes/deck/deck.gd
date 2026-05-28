@@ -1,10 +1,22 @@
 extends CardContainer
+class_name Deck
+
+var _is_being_searched: bool
+var is_being_searched: bool:
+	get:
+		return _is_being_searched
+	set(value):
+		set_is_being_searched.rpc(value)
+
+@rpc("any_peer", "call_local", "reliable")
+func set_is_being_searched(value: bool) -> void:
+	_is_being_searched = value
 
 func add_card(card: Card) -> void:
 	super.add_card(card)
-	card.area_2d.input_pickable = false
+	card.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.card_position = Card.Card_Position.FACE_DOWN_ATTACK
 
 func remove_card(card: Card) -> void:
 	super.remove_card(card)
-	card.area_2d.input_pickable = true
+	card.control.mouse_filter = Control.MOUSE_FILTER_PASS

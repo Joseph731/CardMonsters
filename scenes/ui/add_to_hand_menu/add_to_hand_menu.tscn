@@ -1,15 +1,15 @@
-[gd_scene format=3 uid="uid://s7kkqewb2ppt"]
+[gd_scene format=3 uid="uid://gt27a8rnr37n"]
 
-[ext_resource type="Script" uid="uid://d2s3csr183o2f" path="res://scenes/ui/deck_menu/deck_menu.gd" id="1_jea8d"]
+[ext_resource type="Script" uid="uid://dhc0q6t15nvty" path="res://scenes/ui/add_to_hand_menu/add_to_hand_menu.gd" id="1_j60by"]
 
-[node name="DeckMenu" type="Control" unique_id=677042073]
+[node name="AddToHandMenu" type="Control" unique_id=677042073]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jea8d")
+script = ExtResource("1_j60by")
 
 [node name="BackgroundDetector" type="Button" parent="." unique_id=536406694]
 modulate = Color(1, 1, 1, 0)
@@ -31,12 +31,7 @@ use_top_left = true
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
 layout_mode = 2
 
-[node name="DrawButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
+[node name="AddToHandButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Draw"
-
-[node name="SearchButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1088874010]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Search"
+text = "Add to hand"
