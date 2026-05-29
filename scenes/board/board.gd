@@ -1,10 +1,11 @@
 extends Node
 
 const CARD_MENU = preload("uid://danfrumkq1h60")
-const CARD = preload("uid://cguukq18jkrx2") #TEMP FOR DEVELOPMENT
+const CARD = preload("uid://cguukq18jkrx2")
 const DECK_MENU = preload("uid://s7kkqewb2ppt")
 const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
 const SCROLL_DECK_MENU = preload("uid://cks00hlm6vnr8")
+const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -59,9 +60,13 @@ func _ready() -> void:
 		var card: Card = CARD.instantiate()
 		card.clicked.connect(_on_card_clicked)
 		deck1.add_card(card)
+		if i % 2 == 0:
+			card.face_up_sprite.texture = load("res://scenes/card/happy_reborn.png")
 		card = CARD.instantiate()
 		card.clicked.connect(_on_card_clicked)
 		deck2.add_card(card)
+		if i % 2 == 0:
+			card.face_up_sprite.texture = load("res://scenes/card/happy_reborn.png")
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("drop_carried_card"):
@@ -101,6 +106,11 @@ func _on_card_container_clicked(card_container: CardContainer) -> void:
 		card_position_menu.position_selected.connect(_on_position_selected.bind(card_container.get_path()))
 		menu_container.add_child(card_position_menu)
 		card_position_menu.center_container.global_position = card_container.global_position
+	elif card_container is Deck:
+		var to_top_or_bottom_menu: ToTopOrBottomMenu = TO_TOP_OR_BOTTOM_MENU.instantiate()
+		to_top_or_bottom_menu.choice_selected.connect(_on_top_or_bottom_choice_selected.bind(card_container.get_path()))
+		menu_container.add_child(to_top_or_bottom_menu)
+		to_top_or_bottom_menu.center_container.global_position = card_container.global_position
 	else:
 		move_card_to_card_container.rpc(carried_card.get_path(), card_container.get_path())
 		carried_card = null
@@ -109,6 +119,13 @@ func _on_position_selected(selected_card_position, card_container_path: String) 
 	if selected_card_position != null:
 		set_card_position.rpc(carried_card.get_path(), selected_card_position)
 		move_card_to_card_container.rpc(carried_card.get_path(), card_container_path)
+	carried_card = null
+
+func _on_top_or_bottom_choice_selected(choice, card_container_path: String) -> void:
+	if choice != null:
+		move_card_to_card_container.rpc(carried_card.get_path(), card_container_path)
+		if choice == ToTopOrBottomMenu.Choice.Bottom:
+			get_node(card_container_path).move_card_to_bottom.rpc(carried_card.get_path())
 	carried_card = null
 
 @rpc("any_peer", "call_local", "reliable")
@@ -133,6 +150,7 @@ func _on_deck_clicked(deck: CardContainer) -> void:
 	var deck_menu: DeckMenu = DECK_MENU.instantiate()
 	deck_menu.draw_pressed.connect(_on_draw_pressed.bind(deck))
 	deck_menu.search_pressed.connect(_on_search_pressed.bind(deck))
+	deck_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(deck))
 	menu_container.add_child(deck_menu)
 	deck_menu.center_container.global_position = deck.global_position
 
@@ -142,7 +160,7 @@ func _on_draw_pressed(deck: CardContainer) -> void:
 		target_hand = hand1
 	else:
 		target_hand = hand2
-	move_card_to_card_container.rpc(deck.cards[-1].get_path(), target_hand.get_path())
+	move_card_to_card_container.rpc(deck.cards.back().get_path(), target_hand.get_path())
 
 func _on_search_pressed(deck: Deck) -> void:
 	if deck.is_being_searched:
@@ -157,6 +175,25 @@ func _on_search_pressed(deck: Deck) -> void:
 	menu_container.add_child(scroll_deck_menu)
 	for card in deck.cards:
 		scroll_deck_menu.add_card(card.duplicate())
+	scroll_deck_menu.reverse_children()
+
+func _on_shuffle_pressed(deck: Deck) -> void:
+	deck.cards.shuffle()
+	var card_data_array: Array
+	for card in deck.cards:
+		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path})
+	synchronize_decks.rpc(deck.get_path(), card_data_array)
+
+@rpc("any_peer", "call_local", "reliable") #call_local so the card references are the same for both peers
+func synchronize_decks(deck_path: String, card_data_array: Array) -> void:
+	var deck: Deck = get_node(deck_path)
+	for card in deck.cards_node.get_children():
+		deck.remove_card(card)
+	for card_data in card_data_array:
+		var card: Card = CARD.instantiate()
+		deck.add_card(card)
+		card.clicked.connect(_on_card_clicked)
+		card.face_up_sprite.texture = load(card_data["texture"])
 
 func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
 	var target_hand: CardContainer

@@ -1,15 +1,15 @@
-[gd_scene format=3 uid="uid://s7kkqewb2ppt"]
+[gd_scene format=3 uid="uid://b07f035bw35ox"]
 
-[ext_resource type="Script" uid="uid://d2s3csr183o2f" path="res://scenes/ui/deck_menu/deck_menu.gd" id="1_jea8d"]
+[ext_resource type="Script" uid="uid://p52wclul778i" path="res://scenes/ui/to_top_or_bottom_menu/to_top_or_bottom_menu.gd" id="1_niqg1"]
 
-[node name="DeckMenu" type="Control" unique_id=677042073]
+[node name="ToTopOrBottomMenu" type="Control" unique_id=677042073]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jea8d")
+script = ExtResource("1_niqg1")
 
 [node name="BackgroundDetector" type="Button" parent="." unique_id=536406694]
 modulate = Color(1, 1, 1, 0)
@@ -31,17 +31,12 @@ use_top_left = true
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
 layout_mode = 2
 
-[node name="DrawButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
+[node name="MoveToTopButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Draw"
+text = "Move to the top"
 
-[node name="SearchButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1088874010]
+[node name="MoveToBottomButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1088874010]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Search"
-
-[node name="ShuffleButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=301576457]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Shuffle"
+text = "Move to the bottom"

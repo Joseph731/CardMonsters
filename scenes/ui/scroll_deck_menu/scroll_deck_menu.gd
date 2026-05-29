@@ -36,3 +36,9 @@ func _on_add_to_hand_pressed(card: Card) -> void:
 	card.get_parent().queue_free()
 	if cards.size() <= 0:
 		queue_free()
+
+func reverse_children() -> void:
+	var children_snapshot = v_box_container.get_children()
+	children_snapshot.reverse()
+	for i in range(children_snapshot.size()):
+		v_box_container.move_child(children_snapshot[i], i)

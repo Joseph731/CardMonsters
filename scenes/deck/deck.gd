@@ -20,3 +20,9 @@ func add_card(card: Card) -> void:
 func remove_card(card: Card) -> void:
 	super.remove_card(card)
 	card.control.mouse_filter = Control.MOUSE_FILTER_PASS
+
+@rpc("any_peer", "call_local", "reliable")
+func move_card_to_bottom(card_path: String) -> void:
+	var card: Card = get_node(card_path)
+	cards.erase(card)
+	cards.insert(0, card)

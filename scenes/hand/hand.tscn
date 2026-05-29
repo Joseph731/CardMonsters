@@ -13,3 +13,5 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=719511244]
 shape = SubResource("RectangleShape2D_pvaie")
+
+[node name="Cards" type="Node2D" parent="." unique_id=480732195]

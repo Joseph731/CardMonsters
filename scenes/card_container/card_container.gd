@@ -8,6 +8,7 @@ signal clicked(card_container: CardContainer)
 @export var enforce_occupied: bool
 
 @onready var area_2d: Area2D = $Area2D
+@onready var cards_node: Node = $Cards
 
 var cards: Array[Card]
 
@@ -22,9 +23,8 @@ func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int
 func _on_card_container_clicked() -> void:
 	clicked.emit(self)
 
-
 func add_card(card: Card) -> void:
-	add_child(card)
+	cards_node.add_child(card)
 	cards.append(card)
 	card.card_container_im_inside = self
 	if field_zone_sized_cards:
@@ -32,6 +32,6 @@ func add_card(card: Card) -> void:
 	card.position = Vector2(0,0)
 
 func remove_card(card: Card) -> void:
-	remove_child(card)
+	cards_node.remove_child(card)
 	cards.erase(card)
 	card.card_container_im_inside = null
