@@ -1,33 +1,12 @@
 [gd_scene format=3 uid="uid://danfrumkq1h60"]
 
+[ext_resource type="PackedScene" uid="uid://c18q6duyee26h" path="res://scenes/ui/button_menu/button_menu.tscn" id="1_t84ko"]
 [ext_resource type="Script" uid="uid://c2anlenkeikgg" path="res://scenes/ui/card_menu/card_menu.gd" id="1_yrows"]
 
-[node name="CardMenu" type="Control" unique_id=223388957]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CardMenu" unique_id=223388957 instance=ExtResource("1_t84ko")]
 script = ExtResource("1_yrows")
 
-[node name="BackgroundDetector" type="Button" parent="." unique_id=124886590]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1228086350]
-layout_mode = 0
-use_top_left = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
-layout_mode = 2
-
-[node name="MoveButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
+[node name="MoveButton" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="0" unique_id=1920203141]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Move"

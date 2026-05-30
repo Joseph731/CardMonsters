@@ -1,16 +1,7 @@
-[gd_scene format=3 uid="uid://bdu4b3u3cpggq"]
+[gd_scene format=3 uid="uid://c583f8nchsvpt"]
 
+[ext_resource type="PackedScene" uid="uid://biait4cvdfqqh" path="res://scenes/card_container/card_container.tscn" id="1_awifi"]
 [ext_resource type="Script" uid="uid://5c0p6artycdp" path="res://scenes/deck/deck.gd" id="1_uw8ea"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cjcqi"]
-size = Vector2(138, 200)
-
-[node name="Deck" type="Node2D" unique_id=57187524]
+[node name="Deck" unique_id=108001094 instance=ExtResource("1_awifi")]
 script = ExtResource("1_uw8ea")
-
-[node name="Area2D" type="Area2D" parent="." unique_id=1128374962]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=150844995]
-shape = SubResource("RectangleShape2D_cjcqi")
-
-[node name="Cards" type="Node2D" parent="." unique_id=2062302081]

@@ -1,48 +1,27 @@
 [gd_scene format=3 uid="uid://b8qbcu077yrq7"]
 
 [ext_resource type="Script" uid="uid://byvlarc311m3m" path="res://scenes/ui/card_position_menu/card_position_menu.gd" id="1_1c2fr"]
+[ext_resource type="PackedScene" uid="uid://c18q6duyee26h" path="res://scenes/ui/button_menu/button_menu.tscn" id="1_mj2r7"]
 
-[node name="CardPositionMenu" type="Control" unique_id=1551580173]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CardPositionMenu" unique_id=223388957 instance=ExtResource("1_mj2r7")]
 script = ExtResource("1_1c2fr")
 
-[node name="BackgroundDetector" type="Button" parent="." unique_id=458844354]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1228086350]
-layout_mode = 0
-use_top_left = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
-layout_mode = 2
-
-[node name="FaceUpAttack" type="Button" parent="CenterContainer/VBoxContainer" unique_id=485195180]
+[node name="FaceUpAttack" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="0" unique_id=2126632081]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Face-up Attack"
 
-[node name="FaceUpDefense" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1744291767]
+[node name="FaceUpDefense" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="1" unique_id=49488860]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Face-up Defense"
 
-[node name="FaceDownAttack" type="Button" parent="CenterContainer/VBoxContainer" unique_id=933239847]
+[node name="FaceDownAttack" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="2" unique_id=1996725070]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Face-down Attack"
 
-[node name="FaceDownDefense" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1010532320]
+[node name="FaceDownDefense" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="3" unique_id=2089218350]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Face-down Defense"

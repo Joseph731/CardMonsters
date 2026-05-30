@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c18q6duyee26h"]
+
+[ext_resource type="Script" uid="uid://c4jjr7gdw5nn5" path="res://scenes/ui/button_menu/button_menu.gd" id="1_eyf5d"]
+
+[node name="ButtonMenu" type="Control" unique_id=223388957]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_eyf5d")
+
+[node name="BackgroundDetector" type="Button" parent="." unique_id=124886590]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1228086350]
+layout_mode = 0
+use_top_left = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2081457540]
+layout_mode = 2

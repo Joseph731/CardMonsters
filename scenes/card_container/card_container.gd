@@ -3,8 +3,6 @@ class_name CardContainer
 
 signal clicked(card_container: CardContainer)
 
-@export var field_zone_sized_cards: bool
-@export var is_field_zone: bool
 @export var enforce_occupied: bool
 
 @onready var area_2d: Area2D = $Area2D
@@ -27,8 +25,7 @@ func add_card(card: Card) -> void:
 	cards_node.add_child(card)
 	cards.append(card)
 	card.card_container_im_inside = self
-	if field_zone_sized_cards:
-		card.to_field_size()
+	card.to_field_size()
 	card.position = Vector2(0,0)
 
 func remove_card(card: Card) -> void:

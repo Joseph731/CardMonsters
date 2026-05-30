@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bgyd8mhttmjuy" path="res://scenes/board/board.gd" id="1_ci4ar"]
 [ext_resource type="Texture2D" uid="uid://cxtg2qxm8r1jq" path="res://scenes/board/field.png" id="1_kymhv"]
 [ext_resource type="PackedScene" uid="uid://r5tnl0hgdhd5" path="res://scenes/hand/hand.tscn" id="1_q07he"]
-[ext_resource type="PackedScene" uid="uid://bdu4b3u3cpggq" path="res://scenes/deck/deck.tscn" id="5_ci4ar"]
+[ext_resource type="PackedScene" uid="uid://c583f8nchsvpt" path="res://scenes/deck/deck.tscn" id="5_ci4ar"]
 [ext_resource type="PackedScene" uid="uid://biait4cvdfqqh" path="res://scenes/card_container/card_container.tscn" id="5_kymhv"]
 
 [node name="Board" type="Node" unique_id=778000388]
@@ -20,143 +20,101 @@ position = Vector2(960, 412.5)
 
 [node name="CardContainer1" parent="SpellZone1" unique_id=468257719 instance=ExtResource("5_kymhv")]
 position = Vector2(554, 720)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer2" parent="SpellZone1" unique_id=765916574 instance=ExtResource("5_kymhv")]
 position = Vector2(757, 720)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer3" parent="SpellZone1" unique_id=1088210464 instance=ExtResource("5_kymhv")]
 position = Vector2(960, 720)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer4" parent="SpellZone1" unique_id=1877439357 instance=ExtResource("5_kymhv")]
 position = Vector2(1163, 720)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer5" parent="SpellZone1" unique_id=415815657 instance=ExtResource("5_kymhv")]
 position = Vector2(1366, 720)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="SpellZone2" type="Node" parent="." unique_id=866380890]
 
 [node name="CardContainer1" parent="SpellZone2" unique_id=108001094 instance=ExtResource("5_kymhv")]
 position = Vector2(1366, 105)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer2" parent="SpellZone2" unique_id=20356440 instance=ExtResource("5_kymhv")]
 position = Vector2(1163, 105)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer3" parent="SpellZone2" unique_id=1584998566 instance=ExtResource("5_kymhv")]
 position = Vector2(960, 105)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer4" parent="SpellZone2" unique_id=21130954 instance=ExtResource("5_kymhv")]
 position = Vector2(757, 105)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer5" parent="SpellZone2" unique_id=2123390265 instance=ExtResource("5_kymhv")]
 position = Vector2(554, 105)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="MonsterZone1" type="Node" parent="." unique_id=1387864596]
 
 [node name="CardContainer1" parent="MonsterZone1" unique_id=81881212 instance=ExtResource("5_kymhv")]
 position = Vector2(554, 515)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer2" parent="MonsterZone1" unique_id=1226248098 instance=ExtResource("5_kymhv")]
 position = Vector2(757, 515)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer3" parent="MonsterZone1" unique_id=445684409 instance=ExtResource("5_kymhv")]
 position = Vector2(960, 515)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer4" parent="MonsterZone1" unique_id=1552839519 instance=ExtResource("5_kymhv")]
 position = Vector2(1163, 515)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer5" parent="MonsterZone1" unique_id=1934751887 instance=ExtResource("5_kymhv")]
 position = Vector2(1366, 515)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="MonsterZone2" type="Node" parent="." unique_id=2105077889]
 
 [node name="CardContainer1" parent="MonsterZone2" unique_id=317583463 instance=ExtResource("5_kymhv")]
 position = Vector2(1366, 310)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer2" parent="MonsterZone2" unique_id=2145851980 instance=ExtResource("5_kymhv")]
 position = Vector2(1163, 310)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer3" parent="MonsterZone2" unique_id=1983967684 instance=ExtResource("5_kymhv")]
 position = Vector2(960, 310)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer4" parent="MonsterZone2" unique_id=1416220246 instance=ExtResource("5_kymhv")]
 position = Vector2(757, 310)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
 [node name="CardContainer5" parent="MonsterZone2" unique_id=701465922 instance=ExtResource("5_kymhv")]
 position = Vector2(554, 310)
-field_zone_sized_cards = true
-is_field_zone = true
 enforce_occupied = true
 
-[node name="Hand1" parent="." unique_id=1201960800 instance=ExtResource("1_q07he")]
+[node name="Hand1" parent="." unique_id=1125150860 instance=ExtResource("1_q07he")]
 position = Vector2(960, 950)
 
-[node name="Hand2" parent="." unique_id=567867890 instance=ExtResource("1_q07he")]
+[node name="Hand2" parent="." unique_id=711565836 instance=ExtResource("1_q07he")]
 position = Vector2(960, 950)
 ServersHand = false
 
-[node name="Deck1" parent="." unique_id=57187524 instance=ExtResource("5_ci4ar")]
+[node name="Deck1" parent="." unique_id=2040983058 instance=ExtResource("5_ci4ar")]
 position = Vector2(1569, 720)
-field_zone_sized_cards = true
 
-[node name="Deck2" parent="." unique_id=693197464 instance=ExtResource("5_ci4ar")]
+[node name="Deck2" parent="." unique_id=586612754 instance=ExtResource("5_ci4ar")]
 position = Vector2(351, 105)
-field_zone_sized_cards = true
 
 [node name="MenuContainer" type="Node" parent="." unique_id=256849489]

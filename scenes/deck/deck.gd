@@ -14,6 +14,7 @@ func set_is_being_searched(value: bool) -> void:
 
 func add_card(card: Card) -> void:
 	super.add_card(card)
+	card.to_field_size()
 	card.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.card_position = Card.Card_Position.FACE_DOWN_ATTACK
 
