@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://ckkbvyhwyvw1j"]
+
+[ext_resource type="PackedScene" uid="uid://c583f8nchsvpt" path="res://scenes/deck/deck.tscn" id="1_xgmoy"]
+[ext_resource type="Script" uid="uid://c5khohgm13hk1" path="res://scenes/no_draw_deck/no_draw_deck.gd" id="2_qande"]
+
+[node name="NoDrawDeck" unique_id=108001094 instance=ExtResource("1_xgmoy")]
+script = ExtResource("2_qande")
+is_face_up = true

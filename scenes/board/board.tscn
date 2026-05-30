@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://r5tnl0hgdhd5" path="res://scenes/hand/hand.tscn" id="1_q07he"]
 [ext_resource type="PackedScene" uid="uid://c583f8nchsvpt" path="res://scenes/deck/deck.tscn" id="5_ci4ar"]
 [ext_resource type="PackedScene" uid="uid://biait4cvdfqqh" path="res://scenes/card_container/card_container.tscn" id="5_kymhv"]
-[ext_resource type="PackedScene" uid="uid://ckkbvyhwyvw1j" path="res://scenes/graveyard/graveyard.tscn" id="6_ci4ar"]
+[ext_resource type="PackedScene" uid="uid://ckkbvyhwyvw1j" path="res://scenes/no_draw_deck/no_draw_deck.tscn" id="6_ci4ar"]
 
 [node name="Board" type="Node" unique_id=778000388]
 script = ExtResource("1_ci4ar")
@@ -105,6 +105,14 @@ enforce_occupied = true
 position = Vector2(554, 310)
 enforce_occupied = true
 
+[node name="FieldZone1" parent="." unique_id=421228238 instance=ExtResource("5_kymhv")]
+position = Vector2(351, 515)
+enforce_occupied = true
+
+[node name="FieldZone2" parent="." unique_id=2120257096 instance=ExtResource("5_kymhv")]
+position = Vector2(1569, 310)
+enforce_occupied = true
+
 [node name="Hand1" parent="." unique_id=1125150860 instance=ExtResource("1_q07he")]
 position = Vector2(960, 950)
 
@@ -123,5 +131,19 @@ position = Vector2(1569, 515)
 
 [node name="Graveyard2" parent="." unique_id=1763890373 instance=ExtResource("6_ci4ar")]
 position = Vector2(351, 310)
+
+[node name="Banished1" parent="." unique_id=1352160448 instance=ExtResource("6_ci4ar")]
+position = Vector2(1772, 515)
+
+[node name="Banished2" parent="." unique_id=455336141 instance=ExtResource("6_ci4ar")]
+position = Vector2(148, 310)
+
+[node name="ExtraDeck1" parent="." unique_id=1730666648 instance=ExtResource("6_ci4ar")]
+position = Vector2(351, 720)
+is_face_up = false
+
+[node name="ExtraDeck2" parent="." unique_id=43242541 instance=ExtResource("6_ci4ar")]
+position = Vector2(1569, 105)
+is_face_up = false
 
 [node name="MenuContainer" type="Node" parent="." unique_id=256849489]

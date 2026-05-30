@@ -27,6 +27,6 @@ func _on_shuffle_button_pressed() -> void:
 	shuffle_pressed.emit()
 	queue_free()
 
-func to_face_up_deck() -> void:
+func to_no_draw_deck_menu() -> void:
 	draw_button.queue_free()
 	shuffle_button.queue_free()

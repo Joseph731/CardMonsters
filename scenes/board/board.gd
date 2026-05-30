@@ -15,6 +15,12 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var deck2: CardContainer= $Deck2
 @onready var graveyard1: Node2D = $Graveyard1
 @onready var graveyard2: Node2D = $Graveyard2
+@onready var banished1: Node2D = $Banished1
+@onready var banished2: Node2D = $Banished2
+@onready var extra_deck1: Node2D = $ExtraDeck1
+@onready var extra_deck2: Node2D = $ExtraDeck2
+@onready var field_zone1: CardContainer = $FieldZone1
+@onready var field_zone2: CardContainer = $FieldZone2
 @onready var spell_zone1: Node = $SpellZone1
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
@@ -40,12 +46,19 @@ func _ready() -> void:
 	card_containers.append_array(spell_zone2.get_children())
 	card_containers.append_array(monster_zone1.get_children())
 	card_containers.append_array(monster_zone2.get_children())
+	card_containers.append(field_zone1)
+	card_containers.append(field_zone2)
 	card_containers.append(hand1)
 	card_containers.append(hand2)
 	card_containers.append(deck1)
 	card_containers.append(deck2)
 	card_containers.append(graveyard1)
 	card_containers.append(graveyard2)
+	card_containers.append(banished1)
+	card_containers.append(banished2)
+	card_containers.append(extra_deck1)
+	card_containers.append(extra_deck2)
+	
 	for card_container in card_containers:
 		if card_container is Deck:
 			card_container.clicked.connect(_on_deck_clicked)
@@ -167,7 +180,7 @@ func _on_deck_clicked(deck: Deck) -> void:
 	deck_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(deck))
 	menu_container.add_child(deck_menu)
 	if deck != deck1 && deck != deck2:
-		deck_menu.to_face_up_deck()
+		deck_menu.to_no_draw_deck_menu()
 	deck_menu.center_container.global_position = deck.global_position
 
 func _on_draw_pressed(deck: Deck) -> void:
