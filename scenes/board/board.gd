@@ -6,6 +6,7 @@ const DECK_MENU = preload("uid://s7kkqewb2ppt")
 const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
 const SCROLL_DECK_MENU = preload("uid://cks00hlm6vnr8")
 const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
+const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -91,11 +92,17 @@ func _on_card_clicked(card: Card) -> void:
 		return
 	var card_menu: CardMenu = CARD_MENU.instantiate()
 	card_menu.move_pressed.connect(_on_move_pressed.bind(card))
+	card_menu.inspect_pressed.connect(_on_inspect_pressed.bind(card.face_up_sprite.texture))
 	menu_container.add_child(card_menu)
 	card_menu.center_container.global_position = card.global_position
 
 func _on_move_pressed(card: Card) -> void:
 	carried_card = card
+
+func _on_inspect_pressed(card_texture: Texture2D):
+	var inspect_menu: InspectMenu = INSPECT_MENU.instantiate()
+	menu_container.add_child(inspect_menu)
+	inspect_menu.sprite_2d.texture = card_texture
 
 func _on_card_container_clicked(card_container: CardContainer) -> void:
 	if carried_card == null:
@@ -158,6 +165,8 @@ func _on_deck_clicked(deck: CardContainer) -> void:
 	deck_menu.center_container.global_position = deck.global_position
 
 func _on_draw_pressed(deck: CardContainer) -> void:
+	if deck.is_being_searched:
+		return
 	var target_hand: Hand
 	if is_multiplayer_authority():
 		target_hand = hand1
