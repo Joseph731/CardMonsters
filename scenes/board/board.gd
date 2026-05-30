@@ -13,6 +13,8 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var hand2: Hand = $Hand2
 @onready var deck1: CardContainer = $Deck1
 @onready var deck2: CardContainer= $Deck2
+@onready var graveyard1: Node2D = $Graveyard1
+@onready var graveyard2: Node2D = $Graveyard2
 @onready var spell_zone1: Node = $SpellZone1
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
@@ -32,8 +34,6 @@ var carried_card: Card:
 		_carried_card = value
 
 func _ready() -> void:
-	deck1.clicked.connect(_on_deck_clicked)
-	deck2.clicked.connect(_on_deck_clicked)
 	
 	var card_containers: Array[CardContainer]
 	card_containers.assign(spell_zone1.get_children())
@@ -44,7 +44,11 @@ func _ready() -> void:
 	card_containers.append(hand2)
 	card_containers.append(deck1)
 	card_containers.append(deck2)
+	card_containers.append(graveyard1)
+	card_containers.append(graveyard2)
 	for card_container in card_containers:
+		if card_container is Deck:
+			card_container.clicked.connect(_on_deck_clicked)
 		card_container.clicked.connect(_on_card_container_clicked)
 		if !is_multiplayer_authority() && card_container is not Hand:
 			card_container.global_position.x = reflection_point.position.x * 2 - card_container.global_position.x
@@ -124,7 +128,7 @@ func _on_card_container_clicked(card_container: CardContainer) -> void:
 			elif card_container_parent == monster_zone1 || card_container_parent == monster_zone2:
 				card_position_menu.to_monster_zone_position_menu()
 			card_position_menu.center_container.global_position = card_container.global_position
-	elif card_container is Deck:
+	elif card_container == deck1 || card_container == deck2:
 		var to_top_or_bottom_menu: ToTopOrBottomMenu = TO_TOP_OR_BOTTOM_MENU.instantiate()
 		to_top_or_bottom_menu.choice_selected.connect(_on_top_or_bottom_choice_selected.bind(card_container.get_path()))
 		menu_container.add_child(to_top_or_bottom_menu)
@@ -151,7 +155,7 @@ func _on_top_or_bottom_choice_selected(choice, card_container_path: String) -> v
 			get_node(card_container_path).move_card_to_bottom.rpc(carried_card.get_path())
 	carried_card = null
 
-func _on_deck_clicked(deck: CardContainer) -> void:
+func _on_deck_clicked(deck: Deck) -> void:
 	if carried_card != null:
 		return
 	if deck.cards.size() == 0:
@@ -162,9 +166,11 @@ func _on_deck_clicked(deck: CardContainer) -> void:
 	deck_menu.search_pressed.connect(_on_search_pressed.bind(deck))
 	deck_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(deck))
 	menu_container.add_child(deck_menu)
+	if deck != deck1 && deck != deck2:
+		deck_menu.to_face_up_deck()
 	deck_menu.center_container.global_position = deck.global_position
 
-func _on_draw_pressed(deck: CardContainer) -> void:
+func _on_draw_pressed(deck: Deck) -> void:
 	if deck.is_being_searched:
 		return
 	var target_hand: Hand

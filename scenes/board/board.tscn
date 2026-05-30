@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://r5tnl0hgdhd5" path="res://scenes/hand/hand.tscn" id="1_q07he"]
 [ext_resource type="PackedScene" uid="uid://c583f8nchsvpt" path="res://scenes/deck/deck.tscn" id="5_ci4ar"]
 [ext_resource type="PackedScene" uid="uid://biait4cvdfqqh" path="res://scenes/card_container/card_container.tscn" id="5_kymhv"]
+[ext_resource type="PackedScene" uid="uid://ckkbvyhwyvw1j" path="res://scenes/graveyard/graveyard.tscn" id="6_ci4ar"]
 
 [node name="Board" type="Node" unique_id=778000388]
 script = ExtResource("1_ci4ar")
@@ -116,5 +117,11 @@ position = Vector2(1569, 720)
 
 [node name="Deck2" parent="." unique_id=586612754 instance=ExtResource("5_ci4ar")]
 position = Vector2(351, 105)
+
+[node name="Graveyard1" parent="." unique_id=626459054 instance=ExtResource("6_ci4ar")]
+position = Vector2(1569, 515)
+
+[node name="Graveyard2" parent="." unique_id=1763890373 instance=ExtResource("6_ci4ar")]
+position = Vector2(351, 310)
 
 [node name="MenuContainer" type="Node" parent="." unique_id=256849489]

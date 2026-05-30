@@ -19,10 +19,14 @@ func _on_draw_button_pressed() -> void:
 	draw_pressed.emit()
 	queue_free()
 
-func _on_search_button_pressed()-> void:
+func _on_search_button_pressed() -> void:
 	search_pressed.emit()
 	queue_free()
 
-func _on_shuffle_button_pressed()-> void:
+func _on_shuffle_button_pressed() -> void:
 	shuffle_pressed.emit()
 	queue_free()
+
+func to_face_up_deck() -> void:
+	draw_button.queue_free()
+	shuffle_button.queue_free()
