@@ -106,11 +106,16 @@ func _on_card_container_clicked(card_container: CardContainer) -> void:
 			&& card_container.cards[0] != carried_card):
 		return
 	
-	if (card_container.get_parent() == spell_zone1 || card_container.get_parent() == spell_zone2
-		|| card_container.get_parent() == monster_zone1 || card_container.get_parent() == monster_zone2):
+	var card_container_parent = card_container.get_parent()
+	if (card_container_parent == spell_zone1 || card_container_parent == spell_zone2
+		|| card_container_parent == monster_zone1 || card_container_parent == monster_zone2):
 			var card_position_menu: CardPositionMenu = CARD_POSITION_MENU.instantiate()
 			card_position_menu.position_selected.connect(_on_position_selected.bind(card_container.get_path()))
 			menu_container.add_child(card_position_menu)
+			if card_container_parent == spell_zone1 || card_container_parent == spell_zone2:
+				card_position_menu.to_spell_zone_position_menu()
+			elif card_container_parent == monster_zone1 || card_container_parent == monster_zone2:
+				card_position_menu.to_monster_zone_position_menu()
 			card_position_menu.center_container.global_position = card_container.global_position
 	elif card_container is Deck:
 		var to_top_or_bottom_menu: ToTopOrBottomMenu = TO_TOP_OR_BOTTOM_MENU.instantiate()

@@ -35,4 +35,11 @@ func _on_background_detector_pressed() -> void:
 	position_selected.emit(null)
 	super._on_background_detector_pressed()
 
-#func remove_buttons???
+func to_spell_zone_position_menu() -> void:
+	face_up_defense_button.queue_free()
+	face_down_defense_button.queue_free()
+	face_up_attack_button.text = "Activate"
+	face_down_attack_button.text = "Set"
+
+func to_monster_zone_position_menu() -> void:
+	face_down_attack_button.queue_free()
