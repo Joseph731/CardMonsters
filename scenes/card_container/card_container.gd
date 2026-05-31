@@ -4,6 +4,7 @@ class_name CardContainer
 signal clicked(card_container: CardContainer)
 
 @export var enforce_occupied: bool
+@export var custom_name: String
 
 @onready var area_2d: Area2D = $Area2D
 @onready var cards_node: Node = $Cards

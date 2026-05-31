@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://ct7sdngkhstjt"]
+
+[ext_resource type="Script" uid="uid://c1ji6rpai3yy3" path="res://scenes/ui/log/log.gd" id="1_4yifu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4yifu"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6o0cx"]
+bg_color = Color(0.525894, 0.5258941, 0.5258938, 1)
+
+[node name="LogText" type="Control" unique_id=1052162398]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_4yifu")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=839337861]
+custom_minimum_size = Vector2(250, 350)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4yifu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=733621090]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer" unique_id=494669023]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer" unique_id=837546677]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=474154518]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="InputBox" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=823642762]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_6o0cx")

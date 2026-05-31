@@ -25,7 +25,8 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
 @onready var monster_zone2: Node = $MonsterZone2
-@onready var menu_container: Node = $MenuContainer
+@onready var log_text: LogText = $LogText
+@onready var menu_container: CanvasLayer = $MenuContainer
 
 var _carried_card: Card
 var carried_card: Card:
@@ -40,7 +41,6 @@ var carried_card: Card:
 		_carried_card = value
 
 func _ready() -> void:
-	
 	var card_containers: Array[CardContainer]
 	card_containers.assign(spell_zone1.get_children())
 	card_containers.append_array(spell_zone2.get_children())
@@ -101,8 +101,20 @@ func move_card_to_card_container(card_path: String, target_card_container_path: 
 
 func move_card_from_container_to_container(card: Card,
 	container1: CardContainer, container2: CardContainer) -> void:
-	container1.remove_card(card)
-	container2.add_card(card)
+		var index_in_container1: int = container1.cards.find(card)
+		container1.remove_card(card)
+		container2.add_card(card)
+		var index_in_container2: int = container2.cards.find(card)
+		
+		if (container1 is Hand  || container2 is Hand):
+			var log_message: String = "Card moved from " + container1.custom_name
+			if container1 is Hand:
+				log_message += " (position " + str(index_in_container1 + 1) + ")"
+			log_message += " to " + container2.custom_name
+			if container2 is Hand:
+				log_message += " (position " + str(index_in_container2 + 1) + ")"
+			log_message += "."
+			log_text.add_message(log_message)
 
 func _on_card_clicked(card: Card) -> void:
 	if carried_card != null:
@@ -161,11 +173,15 @@ func set_card_position(card_path: String, target_card_position: Card.Card_Positi
 	var card: Card = get_node(card_path)
 	card.card_position = target_card_position
 
-func _on_top_or_bottom_choice_selected(choice, card_container_path: String) -> void:
+func _on_top_or_bottom_choice_selected(choice, deck_path: String) -> void:
 	if choice != null:
-		move_card_to_card_container.rpc(carried_card.get_path(), card_container_path)
+		move_card_to_card_container.rpc(carried_card.get_path(), deck_path)
+		var deck: Deck = get_node(deck_path)
 		if choice == ToTopOrBottomMenu.Choice.Bottom:
-			get_node(card_container_path).move_card_to_bottom.rpc(carried_card.get_path())
+			deck.move_card_to_bottom.rpc(carried_card.get_path())
+			log_text.add_message.rpc("Card was moved to the bottom of " + deck.custom_name + ".")
+		else:
+			log_text.add_message.rpc("Card was moved to the top of " + deck.custom_name + ".")
 	carried_card = null
 
 func _on_deck_clicked(deck: Deck) -> void:
@@ -185,6 +201,7 @@ func _on_deck_clicked(deck: Deck) -> void:
 
 func _on_draw_pressed(deck: Deck) -> void:
 	if deck.is_being_searched:
+		log_text.add_message("Can't draw from deck that is currently being searched.")
 		return
 	var target_hand: Hand
 	if is_multiplayer_authority():
@@ -192,10 +209,13 @@ func _on_draw_pressed(deck: Deck) -> void:
 	else:
 		target_hand = hand2
 	move_card_to_card_container.rpc(deck.cards.back().get_path(), target_hand.get_path())
+	log_text.add_message.rpc("Card was drawn from " + deck.custom_name + ".")
 
 func _on_search_pressed(deck: Deck) -> void:
 	if deck.is_being_searched:
+		log_text.add_message("Can't search a deck that is currently being searched.")
 		return
+	log_text.add_message.rpc(deck.custom_name + " is being searched.")
 	for menu in menu_container.get_children():
 		if menu is ScrollDeckMenu:
 			menu.queue_free()
@@ -215,6 +235,7 @@ func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
 	else:
 		target_hand = hand2
 	move_card_to_card_container.rpc(deck.cards[card_index].get_path(), target_hand.get_path())
+	log_text.add_message.rpc("Card was taken from search.")
 
 func _on_scroll_deck_menu_tree_exited(deck: Deck) -> void:
 	deck.is_being_searched = false
@@ -225,6 +246,7 @@ func _on_shuffle_pressed(deck: Deck) -> void:
 	for card in deck.cards:
 		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path})
 	synchronize_decks.rpc(deck.get_path(), card_data_array)
+	log_text.add_message.rpc(deck.custom_name + " was shuffled.")
 
 @rpc("any_peer", "call_local", "reliable") #call_local so the card references are the same for both peers
 func synchronize_decks(deck_path: String, card_data_array: Array) -> void:
