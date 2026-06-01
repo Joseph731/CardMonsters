@@ -179,10 +179,12 @@ position = Vector2(1569, 105)
 is_face_up = false
 custom_name = "Extra Deck 2"
 
-[node name="LogText" parent="." unique_id=1052162398 instance=ExtResource("7_exf0g")]
+[node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]
+
+[node name="LogCanvasLayer" type="CanvasLayer" parent="." unique_id=1763938225]
+
+[node name="LogText" parent="LogCanvasLayer" unique_id=1052162398 instance=ExtResource("7_exf0g")]
 offset_left = 17.0
 offset_top = 417.0
 offset_right = 17.0
 offset_bottom = 417.0
-
-[node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]

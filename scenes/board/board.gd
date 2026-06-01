@@ -25,7 +25,7 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
 @onready var monster_zone2: Node = $MonsterZone2
-@onready var log_text: LogText = $LogText
+@onready var log_text: LogText = $LogCanvasLayer/LogText
 @onready var menu_container: CanvasLayer = $MenuContainer
 
 var _carried_card: Card
