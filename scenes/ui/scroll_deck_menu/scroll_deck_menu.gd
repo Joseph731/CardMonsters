@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name ScrollDeckMenu
 
 signal add_card_to_hand(card_index: int)
+signal show_opponent_pressed(card_texture_resource_path: String)
 
 const ADD_TO_HAND_MENU = preload("uid://gt27a8rnr37n")
 const INSPECT_MENU = preload("uid://de5c2kpywyosa")
@@ -31,6 +32,7 @@ func _on_control_gui_input(event: InputEvent, card: Card) -> void:
 			add_to_hand_menu.center_container.position = card.global_position
 			add_to_hand_menu.add_to_hand_pressed.connect(_on_add_to_hand_pressed.bind(card))
 			add_to_hand_menu.inspect_pressed.connect(_on_inspect_pressed.bind(card))
+			add_to_hand_menu.show_opponent_pressed.connect(_on_show_opponent_pressed.bind(card.face_up_sprite.texture.resource_path))
 		
 func _on_add_to_hand_pressed(card: Card) -> void:
 	add_card_to_hand.emit(cards.find(card))
@@ -43,6 +45,9 @@ func _on_inspect_pressed(card: Card) -> void:
 	var inspect_menu: InspectMenu = INSPECT_MENU.instantiate()
 	get_parent().add_child(inspect_menu)
 	inspect_menu.sprite_2d.texture = card.face_up_sprite.texture
+
+func _on_show_opponent_pressed(card_texture_resource_path: String):
+	show_opponent_pressed.emit(card_texture_resource_path)
 
 func reverse_children() -> void:
 	var children_snapshot = v_box_container.get_children()

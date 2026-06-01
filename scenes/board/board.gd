@@ -122,6 +122,7 @@ func _on_card_clicked(card: Card) -> void:
 	var card_menu: CardMenu = CARD_MENU.instantiate()
 	card_menu.move_pressed.connect(_on_move_pressed.bind(card))
 	card_menu.inspect_pressed.connect(_on_inspect_pressed.bind(card.face_up_sprite.texture))
+	card_menu.show_opponent_pressed.connect(_on_show_opponent_pressed.bind(card.face_up_sprite.texture.resource_path))
 	menu_container.add_child(card_menu)
 	card_menu.center_container.global_position = card.global_position
 
@@ -132,6 +133,15 @@ func _on_inspect_pressed(card_texture: Texture2D):
 	var inspect_menu: InspectMenu = INSPECT_MENU.instantiate()
 	menu_container.add_child(inspect_menu)
 	inspect_menu.sprite_2d.texture = card_texture
+
+@rpc("any_peer", "call_remote", "reliable")
+func _on_show_opponent_pressed(card_texture_resource_path: String):
+	if multiplayer.get_remote_sender_id() == 0:
+		_on_show_opponent_pressed.rpc(card_texture_resource_path)
+		return
+	var inspect_menu: InspectMenu = INSPECT_MENU.instantiate()
+	menu_container.add_child(inspect_menu)
+	inspect_menu.sprite_2d.texture = load(card_texture_resource_path)
 
 func _on_card_container_clicked(card_container: CardContainer) -> void:
 	if carried_card == null:
@@ -222,6 +232,7 @@ func _on_search_pressed(deck: Deck) -> void:
 	deck.is_being_searched = true
 	var scroll_deck_menu: ScrollDeckMenu = SCROLL_DECK_MENU.instantiate()
 	scroll_deck_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(deck))
+	scroll_deck_menu.show_opponent_pressed.connect(_on_show_opponent_pressed)
 	scroll_deck_menu.tree_exited.connect(_on_scroll_deck_menu_tree_exited.bind(deck))
 	menu_container.add_child(scroll_deck_menu)
 	for card in deck.cards:
@@ -235,7 +246,7 @@ func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
 	else:
 		target_hand = hand2
 	move_card_to_card_container.rpc(deck.cards[card_index].get_path(), target_hand.get_path())
-	log_text.add_message.rpc("Card was taken from search.")
+	log_text.add_message.rpc("Card was taken from search of " + deck.custom_name + ".")
 
 func _on_scroll_deck_menu_tree_exited(deck: Deck) -> void:
 	deck.is_being_searched = false
