@@ -1,6 +1,8 @@
 extends CardContainer
 class_name Deck
 
+@onready var card_count: Label = $CenterContainer/CardCount
+
 var _is_being_searched: bool
 var is_being_searched: bool:
 	get:
@@ -17,10 +19,12 @@ func add_card(card: Card) -> void:
 	card.to_field_size()
 	card.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.card_position = Card.Card_Position.FACE_DOWN_ATTACK
+	card_count.text = str(cards.size())
 
 func remove_card(card: Card) -> void:
 	super.remove_card(card)
 	card.control.mouse_filter = Control.MOUSE_FILTER_PASS
+	card_count.text = str(cards.size())
 
 @rpc("any_peer", "call_local", "reliable")
 func move_card_to_bottom(card_path: String) -> void:

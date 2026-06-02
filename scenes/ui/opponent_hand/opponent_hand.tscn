@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://b55bqnsy1usm6"]
+
+[ext_resource type="Script" uid="uid://bkayy0velssbu" path="res://scenes/ui/opponent_hand/opponent_hand.gd" id="1_h6voa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jil55"]
+bg_color = Color(0.832902, 0.83290213, 0.8329019, 1)
+
+[node name="OpponentHand" type="Control" unique_id=1586753634]
+custom_minimum_size = Vector2(256, 170)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_h6voa")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1673737155]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jil55")
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=1578636481]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Opponent's Hand: 0"
+horizontal_alignment = 1
+vertical_alignment = 1

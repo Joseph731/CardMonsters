@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c583f8nchsvpt" path="res://scenes/deck/deck.tscn" id="5_ci4ar"]
 [ext_resource type="PackedScene" uid="uid://biait4cvdfqqh" path="res://scenes/card_container/card_container.tscn" id="5_kymhv"]
 [ext_resource type="PackedScene" uid="uid://ckkbvyhwyvw1j" path="res://scenes/no_draw_deck/no_draw_deck.tscn" id="6_ci4ar"]
+[ext_resource type="PackedScene" uid="uid://b55bqnsy1usm6" path="res://scenes/ui/opponent_hand/opponent_hand.tscn" id="7_dej46"]
 [ext_resource type="PackedScene" uid="uid://ct7sdngkhstjt" path="res://scenes/ui/log/log.tscn" id="7_exf0g"]
 
 [node name="Board" type="Node" unique_id=778000388]
@@ -178,6 +179,12 @@ custom_name = "Extra Deck One"
 position = Vector2(1569, 105)
 is_face_up = false
 custom_name = "Extra Deck 2"
+
+[node name="OpponentHand" parent="." unique_id=1586753634 instance=ExtResource("7_dej46")]
+offset_left = 12.0
+offset_top = 19.0
+offset_right = 268.0
+offset_bottom = 189.0
 
 [node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]
 

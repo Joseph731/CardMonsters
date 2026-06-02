@@ -5,3 +5,11 @@
 
 [node name="Deck" unique_id=108001094 instance=ExtResource("1_awifi")]
 script = ExtResource("1_uw8ea")
+
+[node name="CenterContainer" type="CenterContainer" parent="." index="2" unique_id=168722618]
+mouse_filter = 2
+use_top_left = true
+
+[node name="CardCount" type="Label" parent="CenterContainer" index="0" unique_id=1730387287]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64

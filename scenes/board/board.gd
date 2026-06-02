@@ -11,20 +11,21 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
 @onready var hand2: Hand = $Hand2
-@onready var deck1: CardContainer = $Deck1
-@onready var deck2: CardContainer= $Deck2
-@onready var graveyard1: Node2D = $Graveyard1
-@onready var graveyard2: Node2D = $Graveyard2
-@onready var banished1: Node2D = $Banished1
-@onready var banished2: Node2D = $Banished2
-@onready var extra_deck1: Node2D = $ExtraDeck1
-@onready var extra_deck2: Node2D = $ExtraDeck2
+@onready var deck1: Deck = $Deck1
+@onready var deck2: Deck = $Deck2
+@onready var graveyard1: Deck = $Graveyard1
+@onready var graveyard2: Deck = $Graveyard2
+@onready var banished1: Deck = $Banished1
+@onready var banished2: Deck = $Banished2
+@onready var extra_deck1: Deck = $ExtraDeck1
+@onready var extra_deck2: Deck = $ExtraDeck2
 @onready var field_zone1: CardContainer = $FieldZone1
 @onready var field_zone2: CardContainer = $FieldZone2
 @onready var spell_zone1: Node = $SpellZone1
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
 @onready var monster_zone2: Node = $MonsterZone2
+@onready var opponent_hand: Control = $OpponentHand
 @onready var log_text: LogText = $LogCanvasLayer/LogText
 @onready var menu_container: CanvasLayer = $MenuContainer
 
@@ -70,9 +71,15 @@ func _ready() -> void:
 			card_container.rotate(PI)
 	
 	if is_multiplayer_authority():
-		hand2.area_2d.input_pickable = false
+		hand2.collision_shape_2d.shape = hand2.collision_shape_2d.shape.duplicate()
+		hand2.collision_shape_2d.shape.size = opponent_hand.get_custom_minimum_size()
+		hand2.global_position = opponent_hand.global_position + hand2.collision_shape_2d.shape.size / 2
+		hand2.card_count_changed.connect(opponent_hand.on_hand_card_count_changed)
 	else:
-		hand1.area_2d.input_pickable = false
+		hand1.collision_shape_2d.shape = hand1.collision_shape_2d.shape.duplicate()
+		hand1.collision_shape_2d.shape.size = opponent_hand.get_custom_minimum_size()
+		hand1.global_position = opponent_hand.global_position + hand1.collision_shape_2d.shape.size / 2
+		hand1.card_count_changed.connect(opponent_hand.on_hand_card_count_changed)
 	
 	for i in range(10):
 		var card: Card = CARD.instantiate()

@@ -5,6 +5,8 @@ const CARD = preload("uid://cguukq18jkrx2") #TEMP FOR DEVELOPMENT
 
 @export var ServersHand: bool = true
 
+@onready var collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
+
 func update_card_positions() -> void:
 	var hand_count: int = cards.size()
 	match hand_count:

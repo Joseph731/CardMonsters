@@ -2,6 +2,7 @@ extends Node2D
 class_name CardContainer
 
 signal clicked(card_container: CardContainer)
+signal card_count_changed(new_card_count: int)
 
 @export var enforce_occupied: bool
 @export var custom_name: String
@@ -28,8 +29,10 @@ func add_card(card: Card) -> void:
 	card.card_container_im_inside = self
 	card.to_field_size()
 	card.position = Vector2(0,0)
+	card_count_changed.emit(cards.size())
 
 func remove_card(card: Card) -> void:
 	cards_node.remove_child(card)
 	cards.erase(card)
 	card.card_container_im_inside = null
+	card_count_changed.emit(cards.size())
