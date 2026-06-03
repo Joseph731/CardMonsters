@@ -2,8 +2,6 @@ extends Deck
 
 @export var is_face_up: bool = true
 
-@onready var center_container: CenterContainer = $CenterContainer
-
 func _ready() -> void:
 	super._ready()
 	if is_face_up:

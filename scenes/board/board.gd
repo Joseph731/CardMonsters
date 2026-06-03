@@ -5,6 +5,7 @@ const CARD = preload("uid://cguukq18jkrx2")
 const DECK_MENU = preload("uid://s7kkqewb2ppt")
 const CARD_POSITION_MENU = preload("uid://b8qbcu077yrq7")
 const SCROLL_DECK_MENU = preload("uid://cks00hlm6vnr8")
+const SCROLL_HAND_MENU = preload("uid://cva0yl36t3n8i")
 const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
 const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 
@@ -26,6 +27,7 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var monster_zone1: Node = $MonsterZone1
 @onready var monster_zone2: Node = $MonsterZone2
 @onready var opponent_hand_visual: Control = $OpponentHand
+@onready var hand_button: Button = $HandButton
 @onready var log_text: LogText = $LogCanvasLayer/LogText
 @onready var menu_container: CanvasLayer = $MenuContainer
 
@@ -82,6 +84,8 @@ func _ready() -> void:
 		
 		enemy_zones.assign(spell_zone2.get_children())
 		enemy_zones.append_array(monster_zone2.get_children())
+		
+		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand1))
 	else:
 		opponent_deck = deck1
 		opponent_extra_deck = extra_deck1
@@ -89,11 +93,15 @@ func _ready() -> void:
 		
 		enemy_zones.assign(spell_zone1.get_children())
 		enemy_zones.append_array(monster_zone1.get_children())
+		
+		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand2))
 	
 	opponent_hand.collision_shape_2d.shape = opponent_hand.collision_shape_2d.shape.duplicate()
 	opponent_hand.collision_shape_2d.shape.size = opponent_hand_visual.get_custom_minimum_size()
 	opponent_hand.global_position = opponent_hand_visual.global_position + opponent_hand.collision_shape_2d.shape.size / 2
 	opponent_hand.card_count_changed.connect(opponent_hand_visual.on_hand_card_count_changed)
+	
+	opponent_deck.center_container.rotation_degrees = 180
 	
 	for i in range(10):
 		var card: Card = CARD.instantiate()
@@ -178,6 +186,11 @@ func _on_card_container_clicked(card_container: CardContainer) -> void:
 			&& card_container.cards[0] != carried_card):
 		return
 	
+	if card_container is Deck:
+		if card_container.is_being_searched == true:
+			log_text.add_message("Can't move cards to a deck that is currently being searched.")
+			return
+	
 	var card_container_parent = card_container.get_parent()
 	if (card_container_parent == spell_zone1 || card_container_parent == spell_zone2
 		|| card_container_parent == monster_zone1 || card_container_parent == monster_zone2):
@@ -252,9 +265,7 @@ func _on_search_pressed(deck: Deck) -> void:
 		log_text.add_message("Can't search a deck that is currently being searched.")
 		return
 	log_text.add_message.rpc(deck.custom_name + " is being searched.")
-	for menu in menu_container.get_children():
-		if menu is ScrollDeckMenu:
-			menu.queue_free()
+	
 	deck.is_being_searched = true
 	var scroll_deck_menu: ScrollDeckMenu = SCROLL_DECK_MENU.instantiate()
 	scroll_deck_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(deck))
@@ -277,21 +288,37 @@ func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
 func _on_scroll_deck_menu_tree_exited(deck: Deck) -> void:
 	deck.is_being_searched = false
 
-func _on_shuffle_pressed(deck: Deck) -> void:
-	deck.cards.shuffle()
+func _on_shuffle_pressed(card_container: CardContainer) -> void:
+	card_container.cards.shuffle()
 	var card_data_array: Array
-	for card in deck.cards:
-		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path})
-	synchronize_decks.rpc(deck.get_path(), card_data_array)
-	log_text.add_message.rpc(deck.custom_name + " was shuffled.")
+	for card in card_container.cards:
+		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path,
+			"unique_id": str(ResourceUID.create_id())})
+	synchronize_card_containers.rpc(card_container.get_path(), card_data_array)
+	log_text.add_message.rpc(card_container.custom_name + " was shuffled.")
 
 @rpc("any_peer", "call_local", "reliable") #call_local so the card references are the same for both peers
-func synchronize_decks(deck_path: String, card_data_array: Array) -> void:
-	var deck: Deck = get_node(deck_path)
-	for card in deck.cards_node.get_children():
-		deck.remove_card(card)
+func synchronize_card_containers(card_container_path: String, card_data_array: Array) -> void:
+	var card_container: CardContainer = get_node(card_container_path)
+	for card in card_container.cards_node.get_children():
+		card_container.remove_card(card)
 	for card_data in card_data_array:
 		var card: Card = CARD.instantiate()
-		deck.add_card(card)
+		card.name = card_data["unique_id"]
+		card_container.add_card(card)
 		card.clicked.connect(_on_card_clicked)
 		card.face_up_sprite.texture = load(card_data["texture"])
+
+func _on_hand_button_pressed(hand: Hand):
+	if hand.cards.size() == 0:
+		return
+	var scroll_hand_menu: ScrollHandMenu = SCROLL_HAND_MENU.instantiate()
+	scroll_hand_menu.move_pressed.connect(_on_scroll_hand_menu_move_pressed.bind(hand))
+	scroll_hand_menu.show_opponent_pressed.connect(_on_show_opponent_pressed)
+	scroll_hand_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(hand))
+	menu_container.add_child(scroll_hand_menu)
+	for card in hand.cards:
+		scroll_hand_menu.add_card(card.duplicate())
+
+func _on_scroll_hand_menu_move_pressed(card_index: int, hand: Hand) -> void:
+	_on_move_pressed(hand.cards[card_index])

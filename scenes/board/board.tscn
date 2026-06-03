@@ -186,6 +186,14 @@ offset_top = 19.0
 offset_right = 268.0
 offset_bottom = 189.0
 
+[node name="HandButton" type="Button" parent="." unique_id=832646145]
+offset_left = 45.0
+offset_top = 774.0
+offset_right = 245.0
+offset_bottom = 816.0
+theme_override_font_sizes/font_size = 24
+text = "My Hand"
+
 [node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]
 
 [node name="LogCanvasLayer" type="CanvasLayer" parent="." unique_id=1763938225]

@@ -1,6 +1,7 @@
 extends CardContainer
 class_name Deck
 
+@onready var center_container: CenterContainer = $CenterContainer
 @onready var card_count: Label = $CenterContainer/CardCount
 
 var _is_being_searched: bool
