@@ -25,9 +25,14 @@ const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 @onready var spell_zone2: Node = $SpellZone2
 @onready var monster_zone1: Node = $MonsterZone1
 @onready var monster_zone2: Node = $MonsterZone2
-@onready var opponent_hand: Control = $OpponentHand
+@onready var opponent_hand_visual: Control = $OpponentHand
 @onready var log_text: LogText = $LogCanvasLayer/LogText
 @onready var menu_container: CanvasLayer = $MenuContainer
+
+var enemy_zones: Array[CardContainer]
+var opponent_deck: Deck
+var opponent_extra_deck: Deck
+var opponent_hand: Hand
 
 var _carried_card: Card
 var carried_card: Card:
@@ -71,15 +76,24 @@ func _ready() -> void:
 			card_container.rotate(PI)
 	
 	if is_multiplayer_authority():
-		hand2.collision_shape_2d.shape = hand2.collision_shape_2d.shape.duplicate()
-		hand2.collision_shape_2d.shape.size = opponent_hand.get_custom_minimum_size()
-		hand2.global_position = opponent_hand.global_position + hand2.collision_shape_2d.shape.size / 2
-		hand2.card_count_changed.connect(opponent_hand.on_hand_card_count_changed)
+		opponent_deck = deck2
+		opponent_extra_deck = extra_deck2
+		opponent_hand = hand2
+		
+		enemy_zones.assign(spell_zone2.get_children())
+		enemy_zones.append_array(monster_zone2.get_children())
 	else:
-		hand1.collision_shape_2d.shape = hand1.collision_shape_2d.shape.duplicate()
-		hand1.collision_shape_2d.shape.size = opponent_hand.get_custom_minimum_size()
-		hand1.global_position = opponent_hand.global_position + hand1.collision_shape_2d.shape.size / 2
-		hand1.card_count_changed.connect(opponent_hand.on_hand_card_count_changed)
+		opponent_deck = deck1
+		opponent_extra_deck = extra_deck1
+		opponent_hand = hand1
+		
+		enemy_zones.assign(spell_zone1.get_children())
+		enemy_zones.append_array(monster_zone1.get_children())
+	
+	opponent_hand.collision_shape_2d.shape = opponent_hand.collision_shape_2d.shape.duplicate()
+	opponent_hand.collision_shape_2d.shape.size = opponent_hand_visual.get_custom_minimum_size()
+	opponent_hand.global_position = opponent_hand_visual.global_position + opponent_hand.collision_shape_2d.shape.size / 2
+	opponent_hand.card_count_changed.connect(opponent_hand_visual.on_hand_card_count_changed)
 	
 	for i in range(10):
 		var card: Card = CARD.instantiate()
@@ -131,6 +145,11 @@ func _on_card_clicked(card: Card) -> void:
 	card_menu.inspect_pressed.connect(_on_inspect_pressed.bind(card.face_up_sprite.texture))
 	card_menu.show_opponent_pressed.connect(_on_show_opponent_pressed.bind(card.face_up_sprite.texture.resource_path))
 	menu_container.add_child(card_menu)
+	if card.card_position == Card.Card_Position.FACE_DOWN_DEFENSE || card.card_position == Card.Card_Position.FACE_DOWN_ATTACK:
+		for enemy_zone in enemy_zones:
+			if card.card_container_im_inside == enemy_zone:
+				card_menu.inspect_button.queue_free()
+				card_menu.show_opponent_button.queue_free()
 	card_menu.center_container.global_position = card.global_position
 
 func _on_move_pressed(card: Card) -> void:
@@ -221,7 +240,7 @@ func _on_draw_pressed(deck: Deck) -> void:
 		log_text.add_message("Can't draw from deck that is currently being searched.")
 		return
 	var target_hand: Hand
-	if is_multiplayer_authority():
+	if opponent_hand == hand2:
 		target_hand = hand1
 	else:
 		target_hand = hand2
@@ -248,7 +267,7 @@ func _on_search_pressed(deck: Deck) -> void:
 
 func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
 	var target_hand: CardContainer
-	if is_multiplayer_authority():
+	if opponent_hand == hand2:
 		target_hand = hand1
 	else:
 		target_hand = hand2
