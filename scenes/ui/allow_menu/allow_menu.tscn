@@ -18,19 +18,21 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -50.0
-offset_right = 150.0
-offset_bottom = 50.0
+offset_left = -300.0
+offset_top = -100.0
+offset_right = 300.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1487578060]
 layout_mode = 2
 theme_override_constants/separation = 16
+alignment = 1
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=943964691]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Allow Opponent to see Hand?"
 horizontal_alignment = 1
 
@@ -41,8 +43,11 @@ alignment = 1
 
 [node name="YesButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1687295981]
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "Yes"
 
 [node name="NoButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=465854011]
+custom_minimum_size = Vector2(51, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "No"
