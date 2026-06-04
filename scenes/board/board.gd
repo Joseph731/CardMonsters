@@ -8,6 +8,7 @@ const SCROLL_DECK_MENU = preload("uid://cks00hlm6vnr8")
 const SCROLL_HAND_MENU = preload("uid://cva0yl36t3n8i")
 const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
 const INSPECT_MENU = preload("uid://de5c2kpywyosa")
+const OPPONENT_HAND_MENU = preload("uid://c8s1vht5myn5u")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -49,6 +50,34 @@ var carried_card: Card:
 		_carried_card = value
 
 func _ready() -> void:
+	if is_multiplayer_authority():
+		opponent_deck = deck2
+		opponent_extra_deck = extra_deck2
+		opponent_hand = hand2
+		
+		enemy_zones.assign(spell_zone2.get_children())
+		enemy_zones.append_array(monster_zone2.get_children())
+		
+		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand1))
+	else:
+		opponent_deck = deck1
+		opponent_extra_deck = extra_deck1
+		opponent_hand = hand1
+		
+		enemy_zones.assign(spell_zone1.get_children())
+		enemy_zones.append_array(monster_zone1.get_children())
+		
+		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand2))
+	
+	opponent_hand.collision_shape_2d.shape = opponent_hand.collision_shape_2d.shape.duplicate()
+	opponent_hand.collision_shape_2d.shape.size = opponent_hand_visual.get_custom_minimum_size()
+	opponent_hand.global_position = opponent_hand_visual.global_position + opponent_hand.collision_shape_2d.shape.size / 2
+	opponent_hand.card_count_changed.connect(opponent_hand_visual.on_hand_card_count_changed)
+	
+	opponent_deck.center_container.rotation_degrees = 180
+	
+	opponent_hand.clicked.connect(_on_opponent_hand_clicked)
+	
 	var card_containers: Array[CardContainer]
 	card_containers.assign(spell_zone1.get_children())
 	card_containers.append_array(spell_zone2.get_children())
@@ -76,32 +105,6 @@ func _ready() -> void:
 			card_container.global_position.y = reflection_point.position.y * 2 - card_container.global_position.y
 		if card_container.global_position.y < reflection_point.global_position.y:
 			card_container.rotate(PI)
-	
-	if is_multiplayer_authority():
-		opponent_deck = deck2
-		opponent_extra_deck = extra_deck2
-		opponent_hand = hand2
-		
-		enemy_zones.assign(spell_zone2.get_children())
-		enemy_zones.append_array(monster_zone2.get_children())
-		
-		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand1))
-	else:
-		opponent_deck = deck1
-		opponent_extra_deck = extra_deck1
-		opponent_hand = hand1
-		
-		enemy_zones.assign(spell_zone1.get_children())
-		enemy_zones.append_array(monster_zone1.get_children())
-		
-		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand2))
-	
-	opponent_hand.collision_shape_2d.shape = opponent_hand.collision_shape_2d.shape.duplicate()
-	opponent_hand.collision_shape_2d.shape.size = opponent_hand_visual.get_custom_minimum_size()
-	opponent_hand.global_position = opponent_hand_visual.global_position + opponent_hand.collision_shape_2d.shape.size / 2
-	opponent_hand.card_count_changed.connect(opponent_hand_visual.on_hand_card_count_changed)
-	
-	opponent_deck.center_container.rotation_degrees = 180
 	
 	for i in range(10):
 		var card: Card = CARD.instantiate()
@@ -236,7 +239,7 @@ func _on_top_or_bottom_choice_selected(choice, deck_path: String) -> void:
 func _on_deck_clicked(deck: Deck) -> void:
 	if carried_card != null:
 		return
-	if deck.cards.size() == 0:
+	if deck.cards.is_empty():
 		return
 	
 	var deck_menu: DeckMenu = DECK_MENU.instantiate()
@@ -249,6 +252,8 @@ func _on_deck_clicked(deck: Deck) -> void:
 	deck_menu.center_container.global_position = deck.global_position
 
 func _on_draw_pressed(deck: Deck) -> void:
+	if deck.cards.is_empty():
+		return
 	if deck.is_being_searched:
 		log_text.add_message("Can't draw from deck that is currently being searched.")
 		return
@@ -261,34 +266,46 @@ func _on_draw_pressed(deck: Deck) -> void:
 	log_text.add_message.rpc("Card was drawn from " + deck.custom_name + ".")
 
 func _on_search_pressed(deck: Deck) -> void:
+	if deck.cards.is_empty():
+		return
 	if deck.is_being_searched:
 		log_text.add_message("Can't search a deck that is currently being searched.")
 		return
 	log_text.add_message.rpc(deck.custom_name + " is being searched.")
 	
-	deck.is_being_searched = true
 	var scroll_deck_menu: ScrollDeckMenu = SCROLL_DECK_MENU.instantiate()
 	scroll_deck_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(deck))
 	scroll_deck_menu.show_opponent_pressed.connect(_on_show_opponent_pressed)
-	scroll_deck_menu.tree_exited.connect(_on_scroll_deck_menu_tree_exited.bind(deck))
+	scroll_deck_menu.tree_exited.connect(_on_scroll_menu_tree_exited.bind(deck))
 	menu_container.add_child(scroll_deck_menu)
 	for card in deck.cards:
 		scroll_deck_menu.add_card(card.duplicate())
 	scroll_deck_menu.reverse_children()
+	
+	deck.is_being_searched = true
 
-func _on_add_card_to_hand(card_index: int, deck: CardContainer) -> void:
+func _on_add_card_to_hand(card_index: int, card_container: CardContainer) -> void:
 	var target_hand: CardContainer
 	if opponent_hand == hand2:
 		target_hand = hand1
 	else:
 		target_hand = hand2
-	move_card_to_card_container.rpc(deck.cards[card_index].get_path(), target_hand.get_path())
-	log_text.add_message.rpc("Card was taken from search of " + deck.custom_name + ".")
+	move_card_to_card_container.rpc(card_container.cards[card_index].get_path(), target_hand.get_path())
+	log_text.add_message.rpc("Card was taken from search of " + card_container.custom_name + ".")
 
-func _on_scroll_deck_menu_tree_exited(deck: Deck) -> void:
-	deck.is_being_searched = false
+func _on_scroll_menu_tree_exited(card_container: CardContainer) -> void:
+	if card_container is not Deck && card_container is not Hand:
+		return
+	card_container.is_being_searched = false
 
 func _on_shuffle_pressed(card_container: CardContainer) -> void:
+	if card_container.cards.is_empty():
+		return
+	if card_container is Deck:
+		if card_container.is_being_searched:
+			log_text.add_message("Can't shuffle a deck that is currently being searched.")
+			return
+	
 	card_container.cards.shuffle()
 	var card_data_array: Array
 	for card in card_container.cards:
@@ -310,15 +327,48 @@ func synchronize_card_containers(card_container_path: String, card_data_array: A
 		card.face_up_sprite.texture = load(card_data["texture"])
 
 func _on_hand_button_pressed(hand: Hand):
-	if hand.cards.size() == 0:
+	if hand.cards.is_empty():
+		return
+	if hand.is_being_searched:
+		log_text.add_message("Can't look at a hand that is currently being searched.")
 		return
 	var scroll_hand_menu: ScrollHandMenu = SCROLL_HAND_MENU.instantiate()
 	scroll_hand_menu.move_pressed.connect(_on_scroll_hand_menu_move_pressed.bind(hand))
 	scroll_hand_menu.show_opponent_pressed.connect(_on_show_opponent_pressed)
 	scroll_hand_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(hand))
+	scroll_hand_menu.tree_exited.connect(_on_scroll_menu_tree_exited.bind(hand))
 	menu_container.add_child(scroll_hand_menu)
 	for card in hand.cards:
 		scroll_hand_menu.add_card(card.duplicate())
+	hand.is_being_searched = true
 
 func _on_scroll_hand_menu_move_pressed(card_index: int, hand: Hand) -> void:
 	_on_move_pressed(hand.cards[card_index])
+
+func _on_opponent_hand_clicked(hand: Hand) -> void:
+	if carried_card != null:
+		return
+	if hand.cards.is_empty():
+		return
+	var opponent_hand_menu: OpponentHandMenu = OPPONENT_HAND_MENU.instantiate()
+	opponent_hand_menu.see_hand_pressed.connect(_on_see_opponent_hand_pressed.bind(hand))
+
+	menu_container.add_child(opponent_hand_menu)
+	opponent_hand_menu.center_container.global_position = hand.global_position
+
+func _on_see_opponent_hand_pressed(hand: Hand):
+	if hand.cards.is_empty():
+		return
+	if hand.is_being_searched:
+		log_text.add_message("Can't look at a hand that is currently being searched.")
+		return
+	var scroll_hand_menu: ScrollHandMenu = SCROLL_HAND_MENU.instantiate()
+	scroll_hand_menu.is_for_my_own_hand = false
+	scroll_hand_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(hand))
+	scroll_hand_menu.tree_exited.connect(_on_scroll_menu_tree_exited.bind(hand))
+	menu_container.add_child(scroll_hand_menu)
+	for card in hand.cards:
+		var duplicate_card: Card = card.duplicate()
+		duplicate_card.visible = true
+		scroll_hand_menu.add_card(duplicate_card)
+	hand.is_being_searched = true

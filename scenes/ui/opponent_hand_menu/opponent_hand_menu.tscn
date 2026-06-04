@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c8s1vht5myn5u"]
+
+[ext_resource type="PackedScene" uid="uid://c18q6duyee26h" path="res://scenes/ui/button_menu/button_menu.tscn" id="1_jj34l"]
+[ext_resource type="Script" uid="uid://dt3aswnljh0t2" path="res://scenes/ui/opponent_hand_menu/opponent_hand_menu.gd" id="2_hvle1"]
+
+[node name="OpponentHandMenu" unique_id=223388957 instance=ExtResource("1_jj34l")]
+script = ExtResource("2_hvle1")
+
+[node name="SeeHandButton" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="0" unique_id=1518351323]
+layout_mode = 2
+text = "See Hand"

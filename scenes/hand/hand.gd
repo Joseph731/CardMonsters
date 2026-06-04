@@ -7,6 +7,24 @@ const CARD = preload("uid://cguukq18jkrx2") #TEMP FOR DEVELOPMENT
 
 @onready var collision_shape_2d: CollisionShape2D = $Area2D/CollisionShape2D
 
+var _is_being_searched: bool
+var is_being_searched: bool:
+	get:
+		return _is_being_searched
+	set(value):
+		set_is_being_searched.rpc(value)
+
+@rpc("any_peer", "call_local", "reliable")
+func set_is_being_searched(value: bool) -> void:
+	_is_being_searched = value
+	for card in cards:
+		if value:
+			card.face_up_sprite.modulate = Color.GRAY
+			card.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			card.face_up_sprite.modulate = Color.WHITE
+			card.control.mouse_filter = Control.MOUSE_FILTER_STOP
+
 func update_card_positions() -> void:
 	var hand_count: int = cards.size()
 	match hand_count:
@@ -90,3 +108,5 @@ func remove_card(card: Card) -> void:
 	super.remove_card(card)
 	update_card_positions()
 	card.visible = true
+	card.face_up_sprite.modulate = Color.WHITE
+	card.control.mouse_filter = Control.MOUSE_FILTER_STOP

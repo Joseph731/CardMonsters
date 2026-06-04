@@ -14,6 +14,8 @@ var is_being_searched: bool:
 @rpc("any_peer", "call_local", "reliable")
 func set_is_being_searched(value: bool) -> void:
 	_is_being_searched = value
+	for card in cards:
+		card.visible = !value
 
 func add_card(card: Card) -> void:
 	super.add_card(card)
@@ -24,8 +26,9 @@ func add_card(card: Card) -> void:
 
 func remove_card(card: Card) -> void:
 	super.remove_card(card)
-	card.control.mouse_filter = Control.MOUSE_FILTER_PASS
+	card.control.mouse_filter = Control.MOUSE_FILTER_STOP
 	card_count.text = str(cards.size())
+	card.visible = true
 
 @rpc("any_peer", "call_local", "reliable")
 func move_card_to_bottom(card_path: String) -> void:
