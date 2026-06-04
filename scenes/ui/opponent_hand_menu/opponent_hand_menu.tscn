@@ -8,4 +8,5 @@ script = ExtResource("2_hvle1")
 
 [node name="SeeHandButton" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="0" unique_id=1518351323]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "See Hand"

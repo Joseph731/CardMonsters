@@ -9,6 +9,7 @@ const SCROLL_HAND_MENU = preload("uid://cva0yl36t3n8i")
 const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
 const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 const OPPONENT_HAND_MENU = preload("uid://c8s1vht5myn5u")
+const ALLOW_MENU = preload("uid://bl3c7o2xghr66")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -121,7 +122,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("drop_carried_card"):
 		if menu_container.get_child_count() != 0:
-			menu_container.get_children()[-1].queue_free()
+			if menu_container.get_children()[-1] is not AllowMenu:
+				menu_container.get_children()[-1].queue_free()
 		carried_card = null
 
 @rpc("any_peer", "call_local", "reliable")
@@ -362,13 +364,32 @@ func _on_see_opponent_hand_pressed(hand: Hand):
 	if hand.is_being_searched:
 		log_text.add_message("Can't look at a hand that is currently being searched.")
 		return
+	
+	show_allow_menu.rpc()
+
+@rpc("any_peer", "call_remote", "reliable")
+func show_allow_menu() -> void:
+	var allow_menu: AllowMenu = ALLOW_MENU.instantiate()
+	allow_menu.yes_pressed.connect(_on_allow_menu_yes_pressed)
+	allow_menu.no_pressed.connect(_on_allow_menu_no_pressed)
+	menu_container.add_child(allow_menu)
+
+func _on_allow_menu_yes_pressed() -> void:
+	create_scroll_opponent_hand_menu.rpc()
+
+func _on_allow_menu_no_pressed() -> void:
+	var peer_id = multiplayer.get_peers()[0]
+	log_text.add_message.rpc_id(peer_id, "Your opponent declined your request to see their hand.")
+
+@rpc("any_peer", "call_remote", "reliable")
+func create_scroll_opponent_hand_menu() -> void:
 	var scroll_hand_menu: ScrollHandMenu = SCROLL_HAND_MENU.instantiate()
-	scroll_hand_menu.is_for_my_own_hand = false
-	scroll_hand_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(hand))
-	scroll_hand_menu.tree_exited.connect(_on_scroll_menu_tree_exited.bind(hand))
 	menu_container.add_child(scroll_hand_menu)
-	for card in hand.cards:
+	scroll_hand_menu.is_for_my_own_hand = false
+	scroll_hand_menu.add_card_to_hand.connect(_on_add_card_to_hand.bind(opponent_hand))
+	scroll_hand_menu.tree_exited.connect(_on_scroll_menu_tree_exited.bind(opponent_hand))
+	for card in opponent_hand.cards:
 		var duplicate_card: Card = card.duplicate()
 		duplicate_card.visible = true
 		scroll_hand_menu.add_card(duplicate_card)
-	hand.is_being_searched = true
+	opponent_hand.is_being_searched = true

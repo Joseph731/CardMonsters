@@ -14,7 +14,15 @@ const ADD_TO_HAND_MENU = preload("uid://gt27a8rnr37n")
 @onready var shuffle_button: Button = $Control/ShuffleButton
 
 var cards: Array[Card]
-var is_for_my_own_hand: bool = true
+
+var _is_for_my_own_hand: bool = true
+var is_for_my_own_hand: bool:
+	get:
+		return _is_for_my_own_hand
+	set(value):
+		_is_for_my_own_hand = value
+		if !value:
+			shuffle_button.queue_free()
 
 func _ready() -> void:
 	shuffle_button.pressed.connect(_on_shuffle_pressed)
