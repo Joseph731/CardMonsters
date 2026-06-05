@@ -4,6 +4,7 @@ class_name AllowMenu
 signal yes_pressed()
 signal no_pressed()
 
+@onready var label: Label = $PanelContainer/VBoxContainer/Label
 @onready var yes_button: Button = $PanelContainer/VBoxContainer/HBoxContainer/YesButton
 @onready var no_button: Button = $PanelContainer/VBoxContainer/HBoxContainer/NoButton
 

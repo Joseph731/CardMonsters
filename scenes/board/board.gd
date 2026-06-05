@@ -273,6 +273,23 @@ func _on_search_pressed(deck: Deck) -> void:
 	if deck.is_being_searched:
 		log_text.add_message("Can't search a deck that is currently being searched.")
 		return
+	
+	if deck != opponent_deck:
+		create_scroll_deck_menu()
+	else:
+		show_allow_menu.rpc("Allow Opponent to see Deck?" , "_on_allow_see_deck_pressed", "Your opponent declined your request to see their deck.")
+
+@rpc("any_peer", "call_remote", "reliable")
+func create_scroll_deck_menu() -> void:
+	var deck: Deck
+	if multiplayer.get_remote_sender_id() == 0:
+		if deck1 == opponent_deck:
+			deck = deck2
+		else:
+			deck = deck1
+	else:
+		deck = opponent_deck
+	
 	log_text.add_message.rpc(deck.custom_name + " is being searched.")
 	
 	var scroll_deck_menu: ScrollDeckMenu = SCROLL_DECK_MENU.instantiate()
@@ -285,6 +302,9 @@ func _on_search_pressed(deck: Deck) -> void:
 	scroll_deck_menu.reverse_children()
 	
 	deck.is_being_searched = true
+
+func _on_allow_see_deck_pressed() -> void:
+	create_scroll_deck_menu.rpc()
 
 func _on_add_card_to_hand(card_index: int, card_container: CardContainer) -> void:
 	var target_hand: CardContainer
@@ -365,21 +385,22 @@ func _on_see_opponent_hand_pressed(hand: Hand):
 		log_text.add_message("Can't look at a hand that is currently being searched.")
 		return
 	
-	show_allow_menu.rpc()
+	show_allow_menu.rpc("Allow Opponent to see Hand?", "_on_allow_see_hand_yes_pressed", "Your opponent declined your request to see their hand.")
 
 @rpc("any_peer", "call_remote", "reliable")
-func show_allow_menu() -> void:
+func show_allow_menu(allow_menu_text: String, _on_allow_menu_yes_pressed: String, decline_message: String) -> void:
 	var allow_menu: AllowMenu = ALLOW_MENU.instantiate()
-	allow_menu.yes_pressed.connect(_on_allow_menu_yes_pressed)
-	allow_menu.no_pressed.connect(_on_allow_menu_no_pressed)
+	allow_menu.yes_pressed.connect(Callable(self, _on_allow_menu_yes_pressed))
+	allow_menu.no_pressed.connect(_on_allow_menu_no_pressed.bind(decline_message))
 	menu_container.add_child(allow_menu)
+	allow_menu.label.text = allow_menu_text
 
-func _on_allow_menu_yes_pressed() -> void:
+func _on_allow_see_hand_yes_pressed() -> void:
 	create_scroll_opponent_hand_menu.rpc()
 
-func _on_allow_menu_no_pressed() -> void:
+func _on_allow_menu_no_pressed(decline_message: String) -> void:
 	var peer_id = multiplayer.get_peers()[0]
-	log_text.add_message.rpc_id(peer_id, "Your opponent declined your request to see their hand.")
+	log_text.add_message.rpc_id(peer_id, decline_message)
 
 @rpc("any_peer", "call_remote", "reliable")
 func create_scroll_opponent_hand_menu() -> void:
