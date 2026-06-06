@@ -33,10 +33,22 @@ const ALLOW_MENU = preload("uid://bl3c7o2xghr66")
 @onready var log_text: LogText = $LogCanvasLayer/LogText
 @onready var menu_container: CanvasLayer = $MenuContainer
 
-var enemy_zones: Array[CardContainer]
+var my_monster_zones: Array[CardContainer]
+var opponent_monster_zones: Array[CardContainer]
+var my_spell_zones: Array[CardContainer]
+var opponent_spell_zones: Array[CardContainer]
+var my_deck: Deck
 var opponent_deck: Deck
+var my_extra_deck: Deck
 var opponent_extra_deck: Deck
+var my_hand: Hand
 var opponent_hand: Hand
+var my_graveyard: Deck
+var opponent_graveyard: Deck
+var my_banished: Deck
+var opponent_banished: Deck
+
+var deck_dictionary: Dictionary[String, Deck]
 
 var _carried_card: Card
 var carried_card: Card:
@@ -46,29 +58,58 @@ var carried_card: Card:
 		if value == null:
 			if _carried_card != null:
 				_carried_card.glow.visible = false
+				_carried_card.control.mouse_filter = Control.MOUSE_FILTER_STOP
 		else:
 			value.glow.visible = true
+			value.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_carried_card = value
 
 func _ready() -> void:
 	if is_multiplayer_authority():
+		my_deck = deck1
 		opponent_deck = deck2
+		my_extra_deck = extra_deck1
 		opponent_extra_deck = extra_deck2
+		my_hand = hand1
 		opponent_hand = hand2
+		my_graveyard = graveyard1
+		opponent_graveyard = graveyard2
+		my_banished = banished1
+		opponent_banished = banished2
 		
-		enemy_zones.assign(spell_zone2.get_children())
-		enemy_zones.append_array(monster_zone2.get_children())
+		my_spell_zones.assign(spell_zone1.get_children())
+		opponent_spell_zones.assign(spell_zone2.get_children())
+		my_monster_zones.assign(monster_zone1.get_children())
+		opponent_monster_zones.assign(monster_zone2.get_children())
 		
 		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand1))
 	else:
+		my_deck = deck2
 		opponent_deck = deck1
+		my_extra_deck = extra_deck2
 		opponent_extra_deck = extra_deck1
+		my_hand = hand2
 		opponent_hand = hand1
+		my_graveyard = graveyard2
+		opponent_graveyard = graveyard1
+		my_banished = banished2
+		opponent_banished = banished1
 		
-		enemy_zones.assign(spell_zone1.get_children())
-		enemy_zones.append_array(monster_zone1.get_children())
+		my_spell_zones.assign(spell_zone2.get_children())
+		opponent_spell_zones.assign(spell_zone1.get_children())
+		my_monster_zones.assign(monster_zone2.get_children())
+		opponent_monster_zones.assign(monster_zone1.get_children())
 		
 		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand2))
+	
+	deck_dictionary["my_deck"] = my_deck
+	deck_dictionary["opponent_deck"] = opponent_deck
+	deck_dictionary["my_extra_deck"] = my_extra_deck
+	deck_dictionary["opponent_extra_deck"] = opponent_extra_deck
+	deck_dictionary["my_graveyard"] = my_graveyard
+	deck_dictionary["opponent_graveyard"] = opponent_graveyard
+	deck_dictionary["my_banished"] = my_banished
+	deck_dictionary["opponent_banished"] = opponent_banished
 	
 	opponent_hand.collision_shape_2d.shape = opponent_hand.collision_shape_2d.shape.duplicate()
 	opponent_hand.collision_shape_2d.shape.size = opponent_hand_visual.get_custom_minimum_size()
@@ -159,6 +200,9 @@ func _on_card_clicked(card: Card) -> void:
 	card_menu.show_opponent_pressed.connect(_on_show_opponent_pressed.bind(card.face_up_sprite.texture.resource_path))
 	menu_container.add_child(card_menu)
 	if card.card_position == Card.Card_Position.FACE_DOWN_DEFENSE || card.card_position == Card.Card_Position.FACE_DOWN_ATTACK:
+		var enemy_zones: Array[CardContainer]
+		enemy_zones.assign(opponent_spell_zones)
+		enemy_zones.append_array(opponent_monster_zones)
 		for enemy_zone in enemy_zones:
 			if card.card_container_im_inside == enemy_zone:
 				card_menu.inspect_button.queue_free()
@@ -249,7 +293,7 @@ func _on_deck_clicked(deck: Deck) -> void:
 	deck_menu.search_pressed.connect(_on_search_pressed.bind(deck))
 	deck_menu.shuffle_pressed.connect(_on_shuffle_pressed.bind(deck))
 	menu_container.add_child(deck_menu)
-	if deck != deck1 && deck != deck2:
+	if (deck != deck1 && deck != deck2) || deck == opponent_deck:
 		deck_menu.to_no_draw_deck_menu()
 	deck_menu.center_container.global_position = deck.global_position
 
@@ -274,21 +318,25 @@ func _on_search_pressed(deck: Deck) -> void:
 		log_text.add_message("Can't search a deck that is currently being searched.")
 		return
 	
-	if deck != opponent_deck:
-		create_scroll_deck_menu()
+	var deck_dictionary_key: String
+	match deck:
+		my_deck: deck_dictionary_key = "my_deck"
+		opponent_deck: deck_dictionary_key = "opponent_deck"
+		my_extra_deck: deck_dictionary_key = "my_extra_deck"
+		opponent_extra_deck: deck_dictionary_key = "opponent_extra_deck"
+		my_graveyard: deck_dictionary_key = "my_graveyard"
+		opponent_graveyard: deck_dictionary_key = "opponent_graveyard"
+		my_banished: deck_dictionary_key = "my_banished"
+		opponent_banished: deck_dictionary_key = "opponent_banished"
+	
+	if deck != opponent_deck && deck != opponent_extra_deck:
+		create_scroll_deck_menu(deck_dictionary_key)
 	else:
-		show_allow_menu.rpc("Allow Opponent to see Deck?" , "_on_allow_see_deck_pressed", "Your opponent declined your request to see their deck.")
+		show_allow_menu.rpc("Allow Opponent to search " + deck.custom_name + "?" , "_on_allow_see_deck_pressed", "Your opponent declined your search request.", deck_dictionary_key)
 
 @rpc("any_peer", "call_remote", "reliable")
-func create_scroll_deck_menu() -> void:
-	var deck: Deck
-	if multiplayer.get_remote_sender_id() == 0:
-		if deck1 == opponent_deck:
-			deck = deck2
-		else:
-			deck = deck1
-	else:
-		deck = opponent_deck
+func create_scroll_deck_menu(deck_dictionary_key: String) -> void:
+	var deck: Deck = deck_dictionary[deck_dictionary_key]
 	
 	log_text.add_message.rpc(deck.custom_name + " is being searched.")
 	
@@ -303,8 +351,8 @@ func create_scroll_deck_menu() -> void:
 	
 	deck.is_being_searched = true
 
-func _on_allow_see_deck_pressed() -> void:
-	create_scroll_deck_menu.rpc()
+func _on_allow_see_deck_pressed(deck_dictionary_key: String) -> void:
+	create_scroll_deck_menu.rpc(deck_dictionary_key)
 
 func _on_add_card_to_hand(card_index: int, card_container: CardContainer) -> void:
 	var target_hand: CardContainer
@@ -388,9 +436,12 @@ func _on_see_opponent_hand_pressed(hand: Hand):
 	show_allow_menu.rpc("Allow Opponent to see Hand?", "_on_allow_see_hand_yes_pressed", "Your opponent declined your request to see their hand.")
 
 @rpc("any_peer", "call_remote", "reliable")
-func show_allow_menu(allow_menu_text: String, _on_allow_menu_yes_pressed: String, decline_message: String) -> void:
+func show_allow_menu(allow_menu_text: String, _on_allow_menu_yes_pressed: String, decline_message: String, deck_dictionary_key: String = "") -> void:
 	var allow_menu: AllowMenu = ALLOW_MENU.instantiate()
-	allow_menu.yes_pressed.connect(Callable(self, _on_allow_menu_yes_pressed))
+	if deck_dictionary_key == "":
+		allow_menu.yes_pressed.connect(Callable(self, _on_allow_menu_yes_pressed))
+	else:
+		allow_menu.yes_pressed.connect(_on_allow_see_deck_pressed.bind(deck_dictionary_key))
 	allow_menu.no_pressed.connect(_on_allow_menu_no_pressed.bind(decline_message))
 	menu_container.add_child(allow_menu)
 	allow_menu.label.text = allow_menu_text
