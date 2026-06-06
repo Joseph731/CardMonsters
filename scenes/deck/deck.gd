@@ -26,7 +26,7 @@ func add_card(card: Card) -> void:
 
 func remove_card(card: Card) -> void:
 	super.remove_card(card)
-	card.control.mouse_filter = Control.MOUSE_FILTER_STOP
+	card.control.mouse_filter = Control.MOUSE_FILTER_PASS
 	card_count.text = str(cards.size())
 	card.visible = true
 

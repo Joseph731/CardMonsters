@@ -27,3 +27,4 @@ offset_top = -500.0
 offset_right = 342.5
 offset_bottom = 500.0
 pivot_offset = Vector2(342.5, 500)
+mouse_filter = 1

@@ -58,10 +58,8 @@ var carried_card: Card:
 		if value == null:
 			if _carried_card != null:
 				_carried_card.glow.visible = false
-				_carried_card.control.mouse_filter = Control.MOUSE_FILTER_STOP
 		else:
 			value.glow.visible = true
-			value.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_carried_card = value
 
 func _ready() -> void:

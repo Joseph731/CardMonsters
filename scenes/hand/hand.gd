@@ -23,7 +23,7 @@ func set_is_being_searched(value: bool) -> void:
 			card.control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		else:
 			card.face_up_sprite.modulate = Color.WHITE
-			card.control.mouse_filter = Control.MOUSE_FILTER_STOP
+			card.control.mouse_filter = Control.MOUSE_FILTER_PASS
 
 func update_card_positions() -> void:
 	var hand_count: int = cards.size()
@@ -109,4 +109,4 @@ func remove_card(card: Card) -> void:
 	update_card_positions()
 	card.visible = true
 	card.face_up_sprite.modulate = Color.WHITE
-	card.control.mouse_filter = Control.MOUSE_FILTER_STOP
+	card.control.mouse_filter = Control.MOUSE_FILTER_PASS
