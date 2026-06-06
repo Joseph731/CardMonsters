@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dftsxl1vxgby"]
+
+[ext_resource type="Script" uid="uid://cmj5kry0sbip2" path="res://scenes/ui/life_points_ui/life_points_ui.gd" id="1_5x2w7"]
+
+[node name="LifePointsUI" type="Panel" unique_id=1473670846]
+custom_minimum_size = Vector2(280, 80)
+offset_right = 280.0
+offset_bottom = 80.0
+script = ExtResource("1_5x2w7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=805960506]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=2119549300]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Minus500Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=903022822]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "-500"
+
+[node name="Minus100Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1915589103]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "-100"
+
+[node name="Minus50Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1258118561]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "-50"
+
+[node name="Plus50Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2101112502]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "+50"
+
+[node name="Plus100Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1843299286]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "+100"
+
+[node name="Plus500Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1594682085]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "+500"
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=884325461]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "8000"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -10,6 +10,7 @@ const TO_TOP_OR_BOTTOM_MENU = preload("uid://b07f035bw35ox")
 const INSPECT_MENU = preload("uid://de5c2kpywyosa")
 const OPPONENT_HAND_MENU = preload("uid://c8s1vht5myn5u")
 const ALLOW_MENU = preload("uid://bl3c7o2xghr66")
+const TOKEN_MENU = preload("uid://xwn5jpc2h4jf")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
 @onready var hand1: Hand = $Hand1
@@ -30,8 +31,9 @@ const ALLOW_MENU = preload("uid://bl3c7o2xghr66")
 @onready var monster_zone2: Node = $MonsterZone2
 @onready var opponent_hand_visual: Control = $OpponentHand
 @onready var hand_button: Button = $HandButton
-@onready var log_text: LogText = $LogCanvasLayer/LogText
+@onready var coin: TextureButton = $Coin
 @onready var menu_container: CanvasLayer = $MenuContainer
+@onready var log_text: LogText = $LogCanvasLayer/LogText
 
 var my_monster_zones: Array[CardContainer]
 var opponent_monster_zones: Array[CardContainer]
@@ -117,6 +119,8 @@ func _ready() -> void:
 	opponent_deck.center_container.rotation_degrees = 180
 	
 	opponent_hand.clicked.connect(_on_opponent_hand_clicked)
+	
+	coin.flipped.connect(_on_coin_flipped)
 	
 	var card_containers: Array[CardContainer]
 	card_containers.assign(spell_zone1.get_children())
@@ -226,11 +230,23 @@ func _on_show_opponent_pressed(card_texture_resource_path: String):
 
 func _on_card_container_clicked(card_container: CardContainer) -> void:
 	if carried_card == null:
+		if card_container is not Hand && card_container is not Deck && card_container.cards.is_empty():
+			var token_menu: TokenMenu = TOKEN_MENU.instantiate()
+			token_menu.create_token_pressed.connect(_on_create_token_pressed.bind(card_container))
+			menu_container.add_child(token_menu)
+			token_menu.center_container.global_position = card_container.global_position
 		return
-	get_viewport().set_input_as_handled()
+		
 	
 	if (card_container.enforce_occupied && card_container.cards.size() > 0
 			&& card_container.cards[0] != carried_card):
+		return
+	
+	if carried_card.is_token && (card_container is Deck || card_container is Hand):
+		var token: Card = carried_card
+		carried_card = null
+		token.delete.rpc()
+		log_text.add_message.rpc("Token was destroyed.")
 		return
 	
 	if card_container is Deck:
@@ -375,14 +391,19 @@ func _on_shuffle_pressed(card_container: CardContainer) -> void:
 			return
 	
 	card_container.cards.shuffle()
+	if card_container is Hand:
+		card_container.update_card_positions()
+	
 	var card_data_array: Array
 	for card in card_container.cards:
+		var unique_id: String = str(ResourceUID.create_id())
+		card.name = unique_id
 		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path,
-			"unique_id": str(ResourceUID.create_id())})
+			"unique_id": unique_id})
 	synchronize_card_containers.rpc(card_container.get_path(), card_data_array)
 	log_text.add_message.rpc(card_container.custom_name + " was shuffled.")
 
-@rpc("any_peer", "call_local", "reliable") #call_local so the card references are the same for both peers
+@rpc("any_peer", "call_remote", "reliable") #call_local so the card references are the same for both peers
 func synchronize_card_containers(card_container_path: String, card_data_array: Array) -> void:
 	var card_container: CardContainer = get_node(card_container_path)
 	for card in card_container.cards_node.get_children():
@@ -393,6 +414,10 @@ func synchronize_card_containers(card_container_path: String, card_data_array: A
 		card_container.add_card(card)
 		card.clicked.connect(_on_card_clicked)
 		card.face_up_sprite.texture = load(card_data["texture"])
+		if card_data.has("card_position"):
+			card.card_position = card_data["card_position"]
+		if card_data.has("is_token"):
+			card.is_token = card_data["is_token"]
 
 func _on_hand_button_pressed(hand: Hand):
 	if hand.cards.is_empty():
@@ -463,3 +488,26 @@ func create_scroll_opponent_hand_menu() -> void:
 		duplicate_card.visible = true
 		scroll_hand_menu.add_card(duplicate_card)
 	opponent_hand.is_being_searched = true
+
+func _on_coin_flipped(landed_on_heads: bool):
+	var coin_result: String
+	if landed_on_heads:
+		coin_result = "Heads"
+	else:
+		coin_result = "Tails"
+	log_text.add_message.rpc("Coin landed on " + coin_result + ".")
+
+func _on_create_token_pressed(card_container: CardContainer) -> void:
+	var token: Card = CARD.instantiate()
+	token.is_token = true
+	token.clicked.connect(_on_card_clicked)
+	card_container.add_card(token)
+	token.card_position = Card.Card_Position.FACE_UP_ATTACK
+	
+	var card_data_array: Array
+	for card in card_container.cards:
+		var unique_id: String = str(ResourceUID.create_id())
+		card.name = unique_id
+		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path,
+			"unique_id": unique_id, "card_position": card.card_position, "is_token": card.is_token})
+	synchronize_card_containers.rpc(card_container.get_path(), card_data_array)

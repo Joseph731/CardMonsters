@@ -15,6 +15,7 @@ const FULL_SIZE: Vector2 = Vector2(685, 1000)
 @onready var control: Control = $Control
 
 var card_container_im_inside: CardContainer
+var is_token: bool = false
 
 var _card_position: Card_Position
 var card_position: Card_Position:
@@ -79,3 +80,8 @@ func to_attack_position() -> void:
 	face_up_sprite.rotation_degrees = 0
 	glow.rotation_degrees = 0
 	control.rotation_degrees = 0
+
+@rpc("any_peer", "call_local", "reliable")
+func delete() -> void:
+	card_container_im_inside.remove_card(self)
+	queue_free()

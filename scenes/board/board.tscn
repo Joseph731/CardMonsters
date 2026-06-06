@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://ckkbvyhwyvw1j" path="res://scenes/no_draw_deck/no_draw_deck.tscn" id="6_ci4ar"]
 [ext_resource type="PackedScene" uid="uid://b55bqnsy1usm6" path="res://scenes/ui/opponent_hand/opponent_hand.tscn" id="7_dej46"]
 [ext_resource type="PackedScene" uid="uid://ct7sdngkhstjt" path="res://scenes/ui/log/log.tscn" id="7_exf0g"]
+[ext_resource type="PackedScene" uid="uid://dftsxl1vxgby" path="res://scenes/ui/life_points_ui/life_points_ui.tscn" id="8_rpdi3"]
+[ext_resource type="PackedScene" uid="uid://bdniirxoj8ja1" path="res://scenes/ui/coin/coin.tscn" id="9_c6wwm"]
 
 [node name="Board" type="Node" unique_id=778000388]
 script = ExtResource("1_ci4ar")
@@ -193,6 +195,24 @@ offset_right = 245.0
 offset_bottom = 816.0
 theme_override_font_sizes/font_size = 24
 text = "My Hand"
+
+[node name="LifePointsUI1" parent="." unique_id=1473670846 instance=ExtResource("8_rpdi3")]
+offset_left = 1639.0
+offset_top = 90.0
+offset_right = 1919.0
+offset_bottom = 170.0
+
+[node name="LifePointsUI2" parent="." unique_id=312262187 instance=ExtResource("8_rpdi3")]
+offset_left = 1639.0
+offset_top = 180.0
+offset_right = 1919.0
+offset_bottom = 260.0
+
+[node name="Coin" parent="." unique_id=1323420423 instance=ExtResource("9_c6wwm")]
+offset_left = 1706.0
+offset_top = 273.0
+offset_right = 1834.0
+offset_bottom = 401.0
 
 [node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]
 

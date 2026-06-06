@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://ciwptexorncn3"]
+
+[ext_resource type="PackedScene" uid="uid://c18q6duyee26h" path="res://scenes/ui/button_menu/button_menu.tscn" id="1_mjwac"]
+[ext_resource type="Script" uid="uid://blj5m7ddc4rf3" path="res://scenes/ui/coin_menu/coin_menu.gd" id="2_vuhyw"]
+
+[node name="CoinMenu" unique_id=223388957 instance=ExtResource("1_mjwac")]
+script = ExtResource("2_vuhyw")
+
+[node name="FlipButton" type="Button" parent="CenterContainer/VBoxContainer" parent_id_path=PackedInt32Array(2081457540) index="0" unique_id=791382768]
+layout_mode = 2
+text = "Flip"

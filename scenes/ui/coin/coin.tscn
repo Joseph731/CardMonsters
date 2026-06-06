@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bdniirxoj8ja1"]
+
+[ext_resource type="Texture2D" uid="uid://cj75unxdh14dm" path="res://scenes/ui/coin/coin.png" id="1_n85wu"]
+[ext_resource type="Script" uid="uid://ct4bda2mdewlq" path="res://scenes/ui/coin/coin.gd" id="2_wsou0"]
+
+[node name="Coin" type="TextureButton" unique_id=1323420423]
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = ExtResource("1_n85wu")
+script = ExtResource("2_wsou0")
