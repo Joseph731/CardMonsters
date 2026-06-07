@@ -165,8 +165,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("drop_carried_card"):
 		if menu_container.get_child_count() != 0:
-			if menu_container.get_children()[-1] is not AllowMenu:
-				menu_container.get_children()[-1].queue_free()
+			if menu_container.get_children().back() is not AllowMenu:
+				menu_container.get_children().back().queue_free()
 		carried_card = null
 
 @rpc("any_peer", "call_local", "reliable")
@@ -460,6 +460,9 @@ func _on_see_opponent_hand_pressed(hand: Hand):
 
 @rpc("any_peer", "call_remote", "reliable")
 func show_allow_menu(allow_menu_text: String, _on_allow_menu_yes_pressed: String, decline_message: String, deck_dictionary_key: String = "") -> void:
+	if menu_container.get_child_count() != 0:
+		if menu_container.get_children().back() is AllowMenu:
+			return
 	var allow_menu: AllowMenu = ALLOW_MENU.instantiate()
 	if deck_dictionary_key == "":
 		allow_menu.yes_pressed.connect(Callable(self, _on_allow_menu_yes_pressed))
