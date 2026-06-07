@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://c7ysqree0lve4"]
+
+[node name="PhaseUI" type="PanelContainer" unique_id=2097322523]
+offset_right = 255.0
+offset_bottom = 52.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1174079341]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=398035204]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 31
+text = "Standby Phase"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=1921588198]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 31
+text = ">"
