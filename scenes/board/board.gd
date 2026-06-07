@@ -31,6 +31,7 @@ const TOKEN_MENU = preload("uid://xwn5jpc2h4jf")
 @onready var monster_zone2: Node = $MonsterZone2
 @onready var opponent_hand_visual: Control = $OpponentHand
 @onready var hand_button: Button = $HandButton
+@onready var phase_ui: PhaseUI = $PhaseUI
 @onready var coin: TextureButton = $Coin
 @onready var menu_container: CanvasLayer = $MenuContainer
 @onready var log_text: LogText = $LogCanvasLayer/LogText
@@ -514,3 +515,6 @@ func _on_create_token_pressed(card_container: CardContainer) -> void:
 		card_data_array.append({"texture": card.face_up_sprite.texture.resource_path,
 			"unique_id": unique_id, "card_position": card.card_position, "is_token": card.is_token})
 	synchronize_card_containers.rpc(card_container.get_path(), card_data_array)
+
+func _on_allow_change_phase_yes_pressed():
+	phase_ui.change_phases.rpc()

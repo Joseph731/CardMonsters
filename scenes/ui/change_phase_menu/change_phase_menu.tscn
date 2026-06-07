@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dkmhn4r5i1ly8"]
+
+[ext_resource type="Script" uid="uid://sqbibfgxmywk" path="res://scenes/ui/change_phase_menu/change_phase_menu.gd" id="1_hgt08"]
+
+[node name="ChangePhaseMenu" type="Control" unique_id=223388957]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hgt08")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1338755955]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -100.0
+offset_right = 300.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1487578060]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=943964691]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Go to Battle Phase or End Phase?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1956785637]
+layout_mode = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="BattlePhaseButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1687295981]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Battle Phase"
+
+[node name="EndPhaseButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=465854011]
+custom_minimum_size = Vector2(165, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "End Phase"

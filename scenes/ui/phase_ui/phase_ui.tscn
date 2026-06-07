@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://c7ysqree0lve4"]
 
+[ext_resource type="Script" uid="uid://ccyyo3l0akvak" path="res://scenes/ui/phase_ui/phase_ui.gd" id="1_n2sub"]
+
 [node name="PhaseUI" type="PanelContainer" unique_id=2097322523]
 offset_right = 255.0
 offset_bottom = 52.0
+script = ExtResource("1_n2sub")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1174079341]
 layout_mode = 2
