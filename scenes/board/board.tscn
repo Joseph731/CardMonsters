@@ -206,21 +206,21 @@ offset_bottom = 62.0
 
 [node name="LifePointsUI1" parent="." unique_id=1473670846 instance=ExtResource("8_rpdi3")]
 offset_left = 1639.0
-offset_top = 87.0
+offset_top = 173.0
 offset_right = 1919.0
-offset_bottom = 167.0
+offset_bottom = 253.0
 
 [node name="LifePointsUI2" parent="." unique_id=312262187 instance=ExtResource("8_rpdi3")]
 offset_left = 1639.0
-offset_top = 180.0
+offset_top = 80.0
 offset_right = 1919.0
-offset_bottom = 260.0
+offset_bottom = 160.0
 
 [node name="Coin" parent="." unique_id=1323420423 instance=ExtResource("9_c6wwm")]
-offset_left = 1710.0
-offset_top = 273.0
-offset_right = 1838.0
-offset_bottom = 401.0
+offset_left = 1713.0
+offset_top = 271.0
+offset_right = 1841.0
+offset_bottom = 399.0
 
 [node name="MenuContainer" type="CanvasLayer" parent="." unique_id=207869539]
 

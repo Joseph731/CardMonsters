@@ -32,6 +32,8 @@ const TOKEN_MENU = preload("uid://xwn5jpc2h4jf")
 @onready var opponent_hand_visual: Control = $OpponentHand
 @onready var hand_button: Button = $HandButton
 @onready var phase_ui: PhaseUI = $PhaseUI
+@onready var life_points_ui_1: Panel = $LifePointsUI1
+@onready var life_points_ui_2: Panel = $LifePointsUI2
 @onready var coin: TextureButton = $Coin
 @onready var menu_container: CanvasLayer = $MenuContainer
 @onready var log_text: LogText = $LogCanvasLayer/LogText
@@ -102,6 +104,9 @@ func _ready() -> void:
 		opponent_monster_zones.assign(monster_zone1.get_children())
 		
 		hand_button.pressed.connect(_on_hand_button_pressed.bind(hand2))
+		
+		life_points_ui_1.position.y = 80
+		life_points_ui_2.position.y = 173
 	
 	deck_dictionary["my_deck"] = my_deck
 	deck_dictionary["opponent_deck"] = opponent_deck
