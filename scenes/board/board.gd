@@ -13,6 +13,7 @@ const ALLOW_MENU = preload("uid://bl3c7o2xghr66")
 const TOKEN_MENU = preload("uid://xwn5jpc2h4jf")
 
 @onready var reflection_point: Marker2D = $ReflectionPoint
+@onready var direct_attack_point: Marker2D = $DirectAttackPoint
 @onready var hand1: Hand = $Hand1
 @onready var hand2: Hand = $Hand2
 @onready var deck1: Deck = $Deck1
@@ -37,6 +38,7 @@ const TOKEN_MENU = preload("uid://xwn5jpc2h4jf")
 @onready var coin: TextureButton = $Coin
 @onready var menu_container: CanvasLayer = $MenuContainer
 @onready var log_text: LogText = $LogCanvasLayer/LogText
+@onready var arrow_drawer: ArrowDrawer = $ArrowDrawer
 
 var my_monster_zones: Array[CardContainer]
 var opponent_monster_zones: Array[CardContainer]
@@ -54,6 +56,8 @@ var my_banished: Deck
 var opponent_banished: Deck
 
 var deck_dictionary: Dictionary[String, Deck]
+
+var attacker: Node2D
 
 var _carried_card: Card
 var carried_card: Card:
@@ -173,7 +177,9 @@ func _process(_delta: float) -> void:
 		if menu_container.get_child_count() != 0:
 			if menu_container.get_children().back() is not AllowMenu:
 				menu_container.get_children().back().queue_free()
-		carried_card = null
+		else:
+			carried_card = null
+			arrow_drawer.start_node = null
 
 @rpc("any_peer", "call_local", "reliable")
 func move_card_to_card_container(card_path: String, target_card_container_path: String) -> void:
@@ -184,6 +190,9 @@ func move_card_to_card_container(card_path: String, target_card_container_path: 
 
 func move_card_from_container_to_container(card: Card,
 	container1: CardContainer, container2: CardContainer) -> void:
+		if card == arrow_drawer.start_node || card == arrow_drawer.end_node:
+			arrow_drawer.start_node = null
+		
 		var index_in_container1: int = container1.cards.find(card)
 		container1.remove_card(card)
 		container2.add_card(card)
@@ -202,6 +211,13 @@ func move_card_from_container_to_container(card: Card,
 func _on_card_clicked(card: Card) -> void:
 	if carried_card != null:
 		return
+	
+	if arrow_drawer.start_node != null && arrow_drawer.end_node == null:
+		for opponent_monster_zone in opponent_monster_zones:
+			if card.card_container_im_inside == opponent_monster_zone:
+				arrow_drawer.end_node = card
+				return
+	
 	var card_menu: CardMenu = CARD_MENU.instantiate()
 	card_menu.move_pressed.connect(_on_move_pressed.bind(card))
 	card_menu.inspect_pressed.connect(_on_inspect_pressed.bind(card.face_up_sprite.texture))
@@ -215,6 +231,13 @@ func _on_card_clicked(card: Card) -> void:
 			if card.card_container_im_inside == enemy_zone:
 				card_menu.inspect_button.queue_free()
 				card_menu.show_opponent_button.queue_free()
+				break
+	elif card.card_position == Card.Card_Position.FACE_UP_ATTACK && phase_ui.current_phase == PhaseUI.Phase.Battle:
+		for my_monster_zone in my_monster_zones:
+			if card.card_container_im_inside == my_monster_zone:
+				card_menu.attack_button.visible = true
+				card_menu.attack_pressed.connect(_on_attack_pressed.bind(card))
+				break
 	card_menu.center_container.global_position = card.global_position
 
 func _on_move_pressed(card: Card) -> void:
@@ -233,6 +256,10 @@ func _on_show_opponent_pressed(card_texture_resource_path: String):
 	var inspect_menu: InspectMenu = INSPECT_MENU.instantiate()
 	menu_container.add_child(inspect_menu)
 	inspect_menu.sprite_2d.texture = load(card_texture_resource_path)
+
+func _on_attack_pressed(card: Card) -> void:
+	if phase_ui.current_phase == PhaseUI.Phase.Battle:
+		arrow_drawer.start_node = card
 
 func _on_card_container_clicked(card_container: CardContainer) -> void:
 	if carried_card == null:
@@ -431,6 +458,7 @@ func _on_hand_button_pressed(hand: Hand):
 	if hand.is_being_searched:
 		log_text.add_message("Can't look at a hand that is currently being searched.")
 		return
+	carried_card = null
 	var scroll_hand_menu: ScrollHandMenu = SCROLL_HAND_MENU.instantiate()
 	scroll_hand_menu.move_pressed.connect(_on_scroll_hand_menu_move_pressed.bind(hand))
 	scroll_hand_menu.show_opponent_pressed.connect(_on_show_opponent_pressed)
@@ -447,6 +475,13 @@ func _on_scroll_hand_menu_move_pressed(card_index: int, hand: Hand) -> void:
 func _on_opponent_hand_clicked(hand: Hand) -> void:
 	if carried_card != null:
 		return
+	
+	if arrow_drawer.start_node != null && arrow_drawer.end_node == null:
+		arrow_drawer._end_node = hand
+		arrow_drawer.queue_redraw()
+		set_arrow_drawer_end_node_to_direct_attack_point.rpc()
+		return
+	
 	if hand.cards.is_empty():
 		return
 	var opponent_hand_menu: OpponentHandMenu = OPPONENT_HAND_MENU.instantiate()
@@ -454,6 +489,11 @@ func _on_opponent_hand_clicked(hand: Hand) -> void:
 
 	menu_container.add_child(opponent_hand_menu)
 	opponent_hand_menu.center_container.global_position = hand.global_position
+
+@rpc("any_peer", "call_remote", "reliable")
+func set_arrow_drawer_end_node_to_direct_attack_point() -> void:
+	arrow_drawer._end_node = direct_attack_point
+	arrow_drawer.queue_redraw()
 
 func _on_see_opponent_hand_pressed(hand: Hand):
 	if hand.cards.is_empty():

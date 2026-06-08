@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c7ysqree0lve4" path="res://scenes/ui/phase_ui/phase_ui.tscn" id="8_k8r4w"]
 [ext_resource type="PackedScene" uid="uid://dftsxl1vxgby" path="res://scenes/ui/life_points_ui/life_points_ui.tscn" id="8_rpdi3"]
 [ext_resource type="PackedScene" uid="uid://bdniirxoj8ja1" path="res://scenes/ui/coin/coin.tscn" id="9_c6wwm"]
+[ext_resource type="PackedScene" uid="uid://ckk7v5g4wwoso" path="res://scenes/arrow_drawer/arrow_drawer.tscn" id="12_w0prs"]
 
 [node name="Board" type="Node" unique_id=778000388]
 script = ExtResource("1_ci4ar")
@@ -21,6 +22,9 @@ texture = ExtResource("1_kymhv")
 
 [node name="ReflectionPoint" type="Marker2D" parent="." unique_id=1219513842]
 position = Vector2(960, 412.5)
+
+[node name="DirectAttackPoint" type="Marker2D" parent="." unique_id=322621635]
+position = Vector2(960, 1080)
 
 [node name="SpellZone1" type="Node" parent="." unique_id=1327153933]
 
@@ -182,6 +186,8 @@ custom_name = "Extra Deck One"
 position = Vector2(1569, 105)
 is_face_up = false
 custom_name = "Extra Deck 2"
+
+[node name="ArrowDrawer" parent="." unique_id=92624829 instance=ExtResource("12_w0prs")]
 
 [node name="OpponentHand" parent="." unique_id=1586753634 instance=ExtResource("7_dej46")]
 offset_left = 12.0

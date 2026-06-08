@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ckk7v5g4wwoso"]
+
+[ext_resource type="Script" uid="uid://e84o03qt2ngl" path="res://scenes/arrow_drawer/arrow_drawer.gd" id="1_hwxnl"]
+
+[node name="ArrowDrawer" type="Node2D" unique_id=92624829]
+script = ExtResource("1_hwxnl")

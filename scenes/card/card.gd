@@ -11,6 +11,7 @@ const FULL_SIZE: Vector2 = Vector2(685, 1000)
 
 @onready var face_down_sprite: Sprite2D = $FaceDown
 @onready var face_up_sprite: Sprite2D = $FaceUp
+@onready var attack_icon_sprite: Sprite2D = $AttackIcon
 @onready var glow: Sprite2D = $Glow
 @onready var control: Control = $Control
 
@@ -48,6 +49,7 @@ func _on_control_gui_input(event: InputEvent) -> void:
 func to_field_size() -> void:
 	face_down_sprite.scale = Vector2(1, 1) * FIELD_SIZE / FULL_SIZE
 	face_up_sprite.scale = Vector2(1, 1) * FIELD_SIZE / FULL_SIZE
+	attack_icon_sprite.scale = Vector2(1, 1) * FIELD_SIZE / FULL_SIZE
 	glow.scale = Vector2(1, 1) * FIELD_SIZE / FULL_SIZE
 	control.size = FIELD_SIZE
 	control.position = -FIELD_SIZE/2
@@ -56,6 +58,7 @@ func to_field_size() -> void:
 func to_hand_size() -> void:
 	face_down_sprite.scale = Vector2(1, 1) * HAND_SIZE / FULL_SIZE
 	face_up_sprite.scale = Vector2(1, 1) * HAND_SIZE / FULL_SIZE
+	attack_icon_sprite.scale = Vector2(1, 1) * HAND_SIZE / FULL_SIZE
 	glow.scale = Vector2(1, 1) * HAND_SIZE / FULL_SIZE
 	control.size = HAND_SIZE
 	control.position = -HAND_SIZE/2

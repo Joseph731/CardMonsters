@@ -35,6 +35,8 @@ func _on_change_phase_pressed() -> void:
 
 func update_label() -> void:
 	label.text = str(phase_text)
+	if get_parent().arrow_drawer != null:
+		get_parent().arrow_drawer.start_node = null
 
 @rpc("any_peer", "call_remote", "reliable")
 func change_phases() -> void:
