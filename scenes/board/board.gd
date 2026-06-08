@@ -462,7 +462,8 @@ func _on_see_opponent_hand_pressed(hand: Hand):
 @rpc("any_peer", "call_remote", "reliable")
 func show_allow_menu(allow_menu_text: String, _on_allow_menu_yes_pressed: String, decline_message: String, deck_dictionary_key: String = "") -> void:
 	if menu_container.get_child_count() != 0:
-		if menu_container.get_children().back() is AllowMenu:
+		if menu_container.get_children().back() is AllowMenu || menu_container.get_children().back() is ChangePhaseMenu:
+			log_text.add_message.rpc_id(multiplayer.get_remote_sender_id(), "Opponent is busy with a previous request.")
 			return
 	var allow_menu: AllowMenu = ALLOW_MENU.instantiate()
 	if deck_dictionary_key == "":

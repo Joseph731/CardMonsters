@@ -6,5 +6,6 @@
 [node name="Coin" type="TextureButton" unique_id=1323420423]
 offset_right = 40.0
 offset_bottom = 40.0
+focus_mode = 0
 texture_normal = ExtResource("1_n85wu")
 script = ExtResource("2_wsou0")

@@ -43,11 +43,13 @@ alignment = 1
 
 [node name="YesButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1687295981]
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 26
 text = "Yes"
 
 [node name="NoButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=465854011]
 custom_minimum_size = Vector2(51, 0)
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 26
 text = "No"

@@ -21,31 +21,37 @@ theme_override_constants/separation = 2
 [node name="Minus500Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=903022822]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "-500"
 
 [node name="Minus100Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1915589103]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "-100"
 
 [node name="Minus50Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1258118561]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "-50"
 
 [node name="Plus50Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2101112502]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "+50"
 
 [node name="Plus100Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1843299286]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "+100"
 
 [node name="Plus500Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1594682085]
 custom_minimum_size = Vector2(45, 0)
 layout_mode = 2
+focus_mode = 0
 text = "+500"
 
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=884325461]
