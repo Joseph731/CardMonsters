@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://6y20t8is4ct5"]
+
+[ext_resource type="Texture2D" uid="uid://4blqgxhk142p" path="res://icon.svg" id="1_bei8r"]
+[ext_resource type="Script" uid="uid://b3toritgb5hrp" path="res://scenes/ui/deck_select_menu/deck_select_menu.gd" id="1_mpvrp"]
+
+[node name="DeckSelectMenu" type="MarginContainer" unique_id=1865083585]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("1_mpvrp")
+
+[node name="BackButton" type="Button" parent="." unique_id=268248453]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Back"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=700691329]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="DeckID0Button" type="TextureButton" parent="HBoxContainer" unique_id=1131820776]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+texture_normal = ExtResource("1_bei8r")
+
+[node name="DeckID1Button" type="TextureButton" parent="HBoxContainer" unique_id=411423147]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+texture_normal = ExtResource("1_bei8r")

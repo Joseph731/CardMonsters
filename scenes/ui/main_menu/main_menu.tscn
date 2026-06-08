@@ -18,7 +18,7 @@ size_flags_vertical = 4
 
 [node name="SinglePlayerButton" type="Button" parent="VBoxContainer" unique_id=1872579560]
 layout_mode = 2
-text = "Single Player"
+text = "Deck Selection"
 
 [node name="MultiplayerButton" type="Button" parent="VBoxContainer" unique_id=1734522003]
 layout_mode = 2

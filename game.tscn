@@ -1,7 +1,24 @@
 [gd_scene format=3 uid="uid://8umrw27vru0u"]
 
 [ext_resource type="PackedScene" uid="uid://bksicvjexrmw6" path="res://scenes/board/board.tscn" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://bybpnkcnhog3o" path="res://game.gd" id="1_feb5d"]
+[ext_resource type="PackedScene" uid="uid://ciucr71r8flyq" path="res://scenes/lobby_manager/lobby_manager.tscn" id="3_fc0e3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu/pause_menu.tscn" id="4_fc0e3"]
 
 [node name="Game" type="Node" unique_id=198354004]
+script = ExtResource("1_feb5d")
 
 [node name="Board" parent="." unique_id=778000388 instance=ExtResource("1_80nbo")]
+
+[node name="LobbyManager" parent="." unique_id=498686017 instance=ExtResource("3_fc0e3")]
+
+[node name="GameBlocker" type="Control" parent="." unique_id=1870770128]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseMenu" parent="." unique_id=859192102 instance=ExtResource("4_fc0e3")]
+visible = false
